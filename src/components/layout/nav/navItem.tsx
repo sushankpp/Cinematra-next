@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import Link from "../../ui/link";
+import Link from "../../ui/Link";
 import { NavItemProps } from "@/types/components/layout/navItems.types";
 import { cn } from "@/lib/util";
 
-export default function NavItem({ href, label }: NavItemProps) {
+export default function NavItem({ href, label, className }: NavItemProps) {
   const [isActive, setIsActive] = useState(false);
 
   const handleClick = () => {
@@ -21,7 +21,7 @@ export default function NavItem({ href, label }: NavItemProps) {
         "befor:transition-transform before:duration-300 before:origin-left before:ease-in-out",
         isActive
           ? "text-gold-600 font-bold before:w-full"
-          : "text-gray-700 hover:text-charcoal-900 before:w-0",
+          : "text-gray-700 hover:text-charcoal-900 before:w-0", className
       )}
     >
       {label}

@@ -1,7 +1,7 @@
-import Image from "../ui/image";
-import Link from "../ui/link";
-import Container from "../ui/container";
-import NavItems from "./nav/navItems";
+import Image from "../ui/Image";
+import Link from "../ui/Link";
+import Container from "../ui/Container";
+import NavItems from "./nav/NavItems";
 import { navItemsData } from "@/data/navItems.data";
 
 export default function Header() {

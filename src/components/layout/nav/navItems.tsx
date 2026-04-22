@@ -1,13 +1,19 @@
 import { NavItemsProps } from "@/types/components/layout/navItems.types";
-import NavItem from "./navItem";
+import NavItem from "./NavItem";
+import { cn } from "@/lib/util";
 
-export default function NavItems({ items, ...props }: NavItemsProps) {
+export default function NavItems({
+  items,
+  navItemClassName,
+  liClassName,
+  ...props
+}: NavItemsProps) {
   return (
     <nav>
-      <ul className="flex gap-4">
+      <ul className={cn("flex gap-4")} {...props}>
         {items.map(({ href, label }, index) => (
-          <li key={index}>
-            <NavItem href={href} label={label} />
+          <li key={index} className={cn(liClassName)}>
+            <NavItem href={href} label={label} className={navItemClassName} />
           </li>
         ))}
       </ul>
