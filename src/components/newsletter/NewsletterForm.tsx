@@ -19,9 +19,9 @@ export default function NewsletterForm() {
         onChange={(e) => setEmail(e.target.value)}
       />
       <Button
-        variant="tertiary"
+        variant="primary"
         text="Subscribe"
-        icon={<ArrowRight />}
+        icon={<ArrowRight size={20} />}
         iconPosition="right"
         onClick={handleSubmit}
       />

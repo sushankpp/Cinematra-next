@@ -8,4 +8,5 @@ export interface NavItemsProps extends React.HTMLAttributes<HTMLElement>{
     items: NavItemProps[];
     navItemClassName?: string;
     liClassName?: string;
+    ulClassName?: string;
 }

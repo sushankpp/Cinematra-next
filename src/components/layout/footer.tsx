@@ -31,7 +31,8 @@ export default function Footer() {
             items={navItemsData}
             className="flex-row"
             navItemClassName="text-cream-50 hover:text-charcoal-50"
-            liClassName="py-3"
+            liClassName="py-2"
+            ulClassName="flex-col"
           />
           <div className="">
             <Newsletter />
