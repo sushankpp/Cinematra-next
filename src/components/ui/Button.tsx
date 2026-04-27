@@ -6,6 +6,7 @@ const variantClasses = {
   secondary: "bg-charcoal-500 text-white hover:bg-charcoal-800",
   tertiary: "bg-transparent text-white border border-red-500 hover:bg-red-500",
   ghost: "bg-transparent text-black hover:bg-charcoal-100 border border-charcoal-500 border-2 rounded-full p-2",
+  none: "bg-transparent text-white hover:bg-transparent border-none",
 };
 
 export default function Button({
@@ -14,6 +15,7 @@ export default function Button({
   text,
   icon,
   iconPosition = "left",
+  children,
   ...props
 }: ButtonProps) {
   return (
@@ -28,6 +30,7 @@ export default function Button({
       {iconPosition === "left" && icon}
       {text}
       {iconPosition === "right" && icon}
+      {children}
     </button>
   );
 }

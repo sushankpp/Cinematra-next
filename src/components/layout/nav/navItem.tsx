@@ -20,8 +20,8 @@ export default function NavItem({ href, label, className , ...props }: NavItemPr
         "before:absolute before:bottom-0 before:left-0 before:right-0 before:h-[3px] before:bg-red-100",
         "befor:transition-transform before:duration-300 before:origin-left before:ease-in-out",
         isActive
-          ? "text-gold-600 font-bold before:w-full"
-          : "text-gray-700 hover:text-charcoal-900 before:w-0", className
+          ? "text-cream-100 font-bold before:w-full"
+          : "text-brand-50 hover:text-cream-100 before:w-0", className
       )}
       {...props}
     >

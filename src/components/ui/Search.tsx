@@ -38,7 +38,7 @@ export default function Search() {
       </div>
       <Button
         variant="tertiary"
-        icon={<SearchIcon size={20} className="text-black hover:text-white" />}
+        icon={<SearchIcon size={20} className="text-brand-50 hover:text-white" />}
         onClick={() => {
           handleSearchOpen();
         }}
