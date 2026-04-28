@@ -40,7 +40,7 @@ export default {
         charcoal: {
           50: "#f5f5f5",
           100: "#e0e0e0",
-          500: "#4a4a4a",
+          500: "#8a8a8a",
           600: "#1E1B2E",
           800: "#2D2B3D",
           900: "#0f0f0f",
