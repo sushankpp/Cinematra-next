@@ -1,31 +1,16 @@
 "use client";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, LoginFormData } from "@/schemas/loginSchema";
 import { useRouter } from "next/navigation";
 import { Heading } from "@/components/ui/Heading";
-import { ArrowRight, Eye } from "lucide-react";
+import { ArrowRight, Eye, EyeClosed } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import Button from "@/components/ui/Button";
 import Image from "@/components/ui/Image";
-import Input from "@/components/ui/Input";
 import Link from "@/components/ui/Link";
 import AuthOR from "@/components/ui/AuthOR";
+import { LoginForm } from "../../../components/forms/LoginForm";
 
 export default function Login() {
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-    mode: "onBlur",
-  });
-
-  const onSubmit = async (data: LoginFormData) => {
-    console.log(data);
-  };
 
   const handleGoBack = () => {
     router.back();
@@ -44,7 +29,7 @@ export default function Login() {
           icon={<ArrowRight size={20} />}
           iconPosition="right"
           variant="ghost"
-          className="absolute top-4 right-4 text-charcoal-500 bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-200"
+          className="absolute top-4 right-4 text-white bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-200"
         />
       </div>
       <div className="w-[600px] h-full p-10 px-20">
@@ -64,61 +49,7 @@ export default function Login() {
             </Link>
           </p>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="relative">
-            <label htmlFor="email" className="sr-only">
-              Email
-            </label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              {...register("email")}
-              className="w-full placeholder:text-charcoal-500 text-white bg-blue-150 active:bg-blue-200 focus:ring-blue-50 border-none p-3 rounded-md focus:ring-2 transition-all duration-200"
-            />
-            {errors.email && (
-              <p className="text-red-400 text-sm mt-2">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-          <div className="relative mt-4 mb-4">
-            <label htmlFor="password" className="sr-only">
-              Password
-            </label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              {...register("password")}
-              className="w-full placeholder:text-charcoal-500 text-white bg-blue-150 active:bg-blue-200 focus:ring-blue-50 border-none p-3 rounded-md focus:ring-2 transition-all duration-200"
-            />
-            {errors.password && (
-              <p className="text-red-400 text-sm mt-2">
-                {errors.password.message}
-              </p>
-            )}
-            <Button
-              type="button"
-              variant="none"
-              className="absolute right-3 top-3 p-0 h-auto"
-            >
-              <Eye size={20} className="text-charcoal-500" />
-            </Button>
-          </div>
-          <Link
-            href="/forgot-password"
-            className="text-brand-100 hover:text-gold-100 underline"
-          >
-            {" "}
-            Forgot your password?
-          </Link>
-          <Button
-            type="submit"
-            text="Log in"
-            className="w-full justify-center rounded-md bg-blue-100 p-3 hover:bg-blue-50 mt-8"
-          />
-        </form>
+        <LoginForm />
         <AuthOR />
         <Button
           text="Continue with Google"
