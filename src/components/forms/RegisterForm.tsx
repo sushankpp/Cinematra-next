@@ -6,8 +6,12 @@ import { useState } from "react";
 import { Eye, EyeClosed } from "lucide-react";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import { useRouter } from "next/navigation";
+import { authService } from "@/services/auth.service";
 
 export function RegisterForm() {
+  const router = useRouter();
+  const [serverError, setServerError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const {
     watch,
@@ -21,11 +25,34 @@ export function RegisterForm() {
   const password = watch("password");
 
   const onSubmit = async (data: RegisterFormData) => {
+    setServerError(null);
+
+    const { data: res, error } = await authService.register({
+      first_name: data.firstName,
+      last_name: data.lastName,
+      email: data.email,
+      phone: data.phone,
+      password: data.password,
+    });
+
+    if (error) {
+      setServerError(error);
+      return;
+    }
+
+    if (res) {
+      router.push("/");
+    }
     console.log(data);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {serverError && (
+        <div className="mb-4 p-3 rounded-md bg-red-500/10 border border-red-500/20">
+          <p className="text-red-400 text-sm">{serverError}</p>
+        </div>
+      )}
       <div className="relative grid md:grid-cols-2 gap-4">
         <div className="relative">
           <label htmlFor="firstName" className="sr-only">
@@ -144,6 +171,7 @@ export function RegisterForm() {
           id="confirmPassword"
           type={showPassword ? "text" : "password"}
           placeholder="Confirm your password"
+          {...register("confirmPassword")}
           className="w-full placeholder:text-charcoal-500 text-white bg-blue-150 active:bg-blue-200 focus:ring-blue-50 border-none p-3 rounded-md focus:ring-2 transition-all duration-200"
         />
         <Button
@@ -166,7 +194,8 @@ export function RegisterForm() {
       </div>
       <Button
         type="submit"
-        text="Create Account"
+        text={isSubmitting ? "Creating Account..." : "Create Account"}
+        disabled={isSubmitting}
         className="w-full justify-center rounded-md bg-blue-100 p-3 hover:bg-blue-50 mt-8"
       />
     </form>

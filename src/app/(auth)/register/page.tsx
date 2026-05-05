@@ -16,6 +16,10 @@ export default function Register() {
     router.push("/");
   };
 
+  const handleGoogleLogin = () =>{
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
+  }
+
   return (
     <div className="flex p-3 max-w-[1000px] w-full min-h-[600px] bg-charcoal-600 rounded-md justify-center items-center mx-auto my-auto shadow-lg ">
       <div className="w-[500px] self-stretch relative overflow-hidden">
@@ -58,6 +62,7 @@ export default function Register() {
           className="w-full mt-4 rounded-md p-3 justify-center text-white hover:bg-blue-200"
           icon={<FcGoogle size={20} />}
           iconPosition="right"
+          onClick={handleGoogleLogin}
         />
       </div>
     </div>

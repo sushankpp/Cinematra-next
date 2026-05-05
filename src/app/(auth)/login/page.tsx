@@ -10,11 +10,16 @@ import AuthOR from "@/components/ui/AuthOR";
 import { LoginForm } from "../../../components/forms/LoginForm";
 
 export default function Login() {
-  const router = useRouter();
+  const router = useRouter();  
 
   const handleGoBack = () => {
     router.back();
   };
+
+  const handleGoogleLogin = () =>{
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
+  }
+  
   return (
     <div className="flex p-3 max-w-[1000px] w-full h-[600px] bg-charcoal-600 rounded-md justify-center items-center mx-auto my-auto shadow-lg">
       <div className="w-[500px] h-full relative">
@@ -57,6 +62,7 @@ export default function Login() {
           className="w-full mt-4 rounded-md p-3 justify-center text-white hover:bg-blue-200"
           icon={<FcGoogle size={20} />}
           iconPosition="right"
+          onClick={handleGoogleLogin}
         />
       </div>
     </div>
