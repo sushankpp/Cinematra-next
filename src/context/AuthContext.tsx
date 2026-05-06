@@ -23,16 +23,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
     fetchUser();
   }, []);
-  
-  const Logout = () =>{
-      setUser(null);
-    }
 
-    return (
-        <AuthContext.Provider value={{user, isLoading, isAuthenticated: !!user, logout: Logout}}>
-            {children}
-        </AuthContext.Provider>
-    )
+  const Logout = async () => {
+    authService.logout();
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{ user, isLoading, isAuthenticated: !!user, logout: Logout }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export { AuthContext };

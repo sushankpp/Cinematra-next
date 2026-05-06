@@ -4,17 +4,18 @@ import Link from "../../ui/Link";
 import { NavItemProps } from "@/types/components/layout/navItems.types";
 import { cn } from "@/lib/util";
 
-export default function NavItem({ href, label, className , ...props }: NavItemProps) {
+export default function NavItem({ href, label, className ,onClick, ...props }: NavItemProps) {
   const [isActive, setIsActive] = useState(false);
 
   const handleClick = () => {
     setIsActive(!isActive);
+    onClick?.();
   };
   
   return (
     <Link
-      href={href}
-      onClick={handleClick}
+      href={href ?? "#"}
+      onClick={handleClick ?? onclick}
       className={cn(
         "relative pb-1",
         "before:absolute before:bottom-0 before:left-0 before:right-0 before:h-[3px] before:bg-red-100",

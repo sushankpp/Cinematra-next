@@ -23,4 +23,10 @@ export const authService = {
     apiCall<MeResponse>("/auth/me", {
       method: "GET",
     }),
+  
+  logout: () =>{
+    apiCall("/auth/logout", {
+      method: "POST",
+    })
+  }
 };

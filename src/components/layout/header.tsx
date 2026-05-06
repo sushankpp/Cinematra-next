@@ -1,3 +1,4 @@
+"use client";
 import Image from "../ui/Image";
 import Link from "../ui/Link";
 import Container from "../ui/Container";
@@ -6,8 +7,11 @@ import NavItemsMobile from "./nav/NavItemsMobile";
 import { navItemsData } from "@/data/navItems.data";
 import Search from "../ui/Search";
 import UserButton from "../ui/UserButton";
+import {useAuth} from "@/hooks/useAuth";
+import UserProfile from "../ui/UserProfile";
 
 export default function Header() {
+  const {user, isAuthenticated} = useAuth();
   return (
     <header>
       <Container>
@@ -29,7 +33,10 @@ export default function Header() {
           <NavItemsMobile items={navItemsData} />
           <div className="flex gap-3">
             <Search />
+            {
+              isAuthenticated ? <UserProfile user={user!} /> : 
             <UserButton />
+            }
           </div>
         </div>
       </Container>
