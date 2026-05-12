@@ -19,6 +19,12 @@ export default {
         lg: "1330px",
         xl: "1440px",
       },
+      fontFamily: {
+        tenor: ["Tenor Sans", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
+        bebas: ["Bebas Neue", "cursive"],
+        sourceSerif: ["Source Serif 4", "serif"],
+      },
       colors: {
         brand: {
           50: "#f5f7ff",

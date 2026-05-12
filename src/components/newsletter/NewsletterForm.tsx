@@ -16,6 +16,7 @@ export default function NewsletterForm() {
         type="email"
         placeholder="Enter your email"
         value={email}
+        className="focus:ring-0 focus:border-brand-100"
         onChange={(e) => setEmail(e.target.value)}
       />
       <Button

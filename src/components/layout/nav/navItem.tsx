@@ -4,7 +4,7 @@ import Link from "../../ui/Link";
 import { NavItemProps } from "@/types/components/layout/navItems.types";
 import { cn } from "@/lib/util";
 
-export default function NavItem({ href, label, className ,onClick, ...props }: NavItemProps) {
+export default function NavItem({ href, label, className , onClick, ...props }: NavItemProps) {
   const [isActive, setIsActive] = useState(false);
 
   const handleClick = () => {

@@ -46,8 +46,8 @@ export default function NavItemsMobile({
               href={href}
               label={label}
               className={cn(navItemClassName, "text-bold")}
-              onClick={() => setIsOpen(false)}
               {...props}
+              onClick={() => setIsOpen(false)}
             />
           </li>
         ))}

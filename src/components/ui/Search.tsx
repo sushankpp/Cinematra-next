@@ -32,7 +32,7 @@ export default function Search() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className={cn(
-            "focus:outline-none focus:ring-0  h-[40px] border-charcoal-500",
+            "focus:outline-none focus:ring-0  h-[40px] border-charcoal-500 text-white",
           )}
         />
       </div>
