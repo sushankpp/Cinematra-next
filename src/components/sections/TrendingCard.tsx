@@ -7,13 +7,14 @@ import {
 import { Heading } from "../ui/Heading";
 import Link from "../ui/Link";
 import Image from "../ui/Image";
+import { TrendingCardProps } from "@/types/components/sections/TrendingCard.types";
 
-export function TrendingCard() {
+export function TrendingCard({ title, creatorName, videoSrc, likes, comment, duration, videoPoster, creatorProfile}: TrendingCardProps) {
   return (
-    <div className="h-[500px]">
+    <div className="h-[350px]">
       <div className="relative h-full w-full group/card cursor-pointer overflow-hidden rounded-lg">
         <video
-          poster="./login-image.jpg"
+          poster={videoPoster}
           className="absolute h-full w-full object-cover rounded-lg"
         >
           Your browser does not support the video tag.
@@ -23,22 +24,22 @@ export function TrendingCard() {
           <div className="absolute w-full top-4 flex justify-between px-4">
             <div className="">
               <Heading
-                text="Movie Title goes here"
+                text={title}
                 level={2}
                 className="left-4 text-brand-100 font-bebas text-[32px]"
               />
               <span className="flex">
                 by
                 <Link
-                  href="/director/john-doe"
+                  href={videoSrc}
                   className="text-charcoal-100 hover:text-gold-500 transition-colors flex gap-1 items-center ml-2 hover:underline"
                 >
                   <Image
-                    src="/default-profile.jpg"
+                    src={creatorProfile}
                     alt="Director"
                     className="w-[20px] h-[20px] rounded-full"
                   />
-                  John Doe
+                  {creatorName}
                 </Link>
               </span>
             </div>
@@ -52,13 +53,13 @@ export function TrendingCard() {
           />
           <div className="absolute w-full px-4 bottom-4 flex justify-between opacity-0 group-hover/card:opacity-100 transition-all duration-300 group-hover/card:translate-y-1">
             <div>
-              <p className="text-charcoal-100 text-[18px] font-bebas">3:04</p>
+              <p className="text-charcoal-100 text-[18px] font-bebas">{duration}</p>
             </div>
             <div className="flex gap-4">
               <div className="flex  gap-2 justify-center">
                 <ThumbsUp size={20} className="text-white cursor-pointer" />
                 <p className="text-charcoal-50 font-bebas tracking-[1px]">
-                  3,200
+                  {likes}
                 </p>
               </div>
               <div className="flex  gap-2 justify-center">
@@ -67,7 +68,7 @@ export function TrendingCard() {
                   className="text-white cursor-pointer"
                 />
                 <p className="text-charcoal-50 font-bebas tracking-[1px]">
-                  3,200
+                  {comment}
                 </p>
               </div>
             </div>

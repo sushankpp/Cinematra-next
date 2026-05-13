@@ -14,13 +14,13 @@ export default function TrendingControls({
     <div className="flex gap-2">
       <Button
         onClick={onPrev}
-        className="text-charcoal-50 hover:bg-charcoal-100/40"
+        className="text-charcoal-800 hover:bg-charcoal-100/40"
         variant="ghost"
         icon={<ArrowLeftCircle />}
         />
       <Button
         onClick={onNext}
-        className="text-charcoal-50 hover:bg-charcoal-100/40"
+        className="text-charcoal-800 hover:bg-charcoal-100/40"
         variant="ghost"
         icon={<ArrowRightCircle />}
       />

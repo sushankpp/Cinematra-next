@@ -17,7 +17,7 @@ export default function TrendingPagination({
         <Button
           key={index}
           onClick={() => onDotClick(index)}
-          className={`h-2 rounded-full transition-all duration-300 ${activeIndex === index ? "w-6 bg-gold-100" : "w-2 bg-charcoal-100/40 hover:bg-charcoal-100"}`}
+          className={`h-2 rounded-full transition-all duration-300 ${activeIndex === index ? "w-6 bg-gold-500 hover:bg-gold-600" : "w-2 bg-charcoal-100/40 hover:bg-charcoal-100"}`}
         />
       ))}
     </div>

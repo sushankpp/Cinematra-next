@@ -1,14 +1,26 @@
 "use client";
 import useEmblaCarousel from "embla-carousel-react";
-import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
+import { ArrowRightCircle } from "lucide-react";
 import Container from "../ui/Container";
 import { Heading } from "../ui/Heading";
 import Link from "../ui/Link";
 import { TrendingCard } from "./TrendingCard";
-import Button from "../ui/Button";
 import { useEffect, useState } from "react";
 import TrendingControls from "./TrendingControls";
 import TrendingPagination from "./TrendingPagination";
+
+const trendingVideos = [
+  {
+    title: "Movie Title goes here",
+    duration: "3:04",
+    likes: 3200,
+    comment: 150,
+    videoSrc: "/video/1",
+    videoPoster: "/login-image.jpg",
+    creatorName: "John Doe",
+    creatorProfile: "/profile.jpg"
+  }
+]
 
 export function TrendingSlider() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -32,18 +44,18 @@ export function TrendingSlider() {
   const scrollNext = () => emblaApi?.scrollNext();
 
   return (
-    <div>
+    <div className="mb-6 mt-6 border-b border-charcoal-200/10 pb-6">
       <Container>
         <div className="flex justify-between items-center mb-6">
           <Heading
             text="Trending Now"
-            className="font-tenor text-gold-100 text-[32px]"
+            className="font-tenor text-charcoal-900 text-[32px]"
           />
           <Link
             href="trending"
-            className="text-charcoal-100 flex gap-1 items-center hover:underline transition-all duration-300 ease-in-out group hover:text-gold-500"
+            className="text-charcoal-800 flex gap-1 items-center hover:underline transition-all duration-300 ease-in-out group hover:text-gold-500"
           >
-            Browse all trending items
+            View all
             <ArrowRightCircle
               size={16}
               className="group-hover:translate-x-1 transition-transform duration-300"
@@ -54,13 +66,11 @@ export function TrendingSlider() {
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex gap-4">
               <div className="lg:flex-[0_0_calc(50%-8px)] flex-[0_0_100%]">
-                <TrendingCard />
-              </div>
-              <div className="flex-[0_0_calc(50%-8px)]">
-                <TrendingCard />
-              </div>
-              <div className="flex-[0_0_calc(50%-8px)]">
-                <TrendingCard />
+                {
+                  trendingVideos.map((video, index) => (
+                    <TrendingCard key={index} {...video} />
+                  ))
+                }
               </div>
             </div>
           </div>
