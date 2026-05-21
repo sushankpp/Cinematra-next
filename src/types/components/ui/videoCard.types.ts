@@ -5,5 +5,5 @@ export interface VideoCardProps {
   views: string;
   postedTime: string;
   videoThumbnail: string;
-  videoSrc: string;
+  videoId: string;
 }

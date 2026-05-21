@@ -21,6 +21,20 @@
   }
 }
 
+@keyframes liquidShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
 body {
   font-family: 'Inter', sans-serif;
+}
+
+.liquid-bg {
+  background-size: 200% 200%;
+  animation: liquidShift 6s ease infinite;
 }

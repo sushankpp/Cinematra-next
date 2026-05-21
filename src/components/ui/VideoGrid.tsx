@@ -11,7 +11,7 @@ const videosData = [
     views: "20k views",
     postedTime: "3 days ago",
     videoThumbnail: "/register-image.jpg",
-    videoSrc: "/video/1",
+    videoId: "1",
   },
 ];
 

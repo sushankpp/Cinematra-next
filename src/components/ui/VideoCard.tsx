@@ -3,7 +3,7 @@ import Image from "./Image";
 import Link from "./Link";
 import { VideoCardProps } from "@/types/components/ui/videoCard.types";
 
-export default function VideoCard({creatorName, videoTitle, creatorProfile, views, postedTime, videoThumbnail, videoSrc}: VideoCardProps) {
+export default function VideoCard({creatorName, videoTitle, creatorProfile, views, postedTime, videoThumbnail, videoId}: VideoCardProps) {
   return (
     <div className="relative group/videoCard cursor-pointer hover:shadow-lg hover:bg-charcoal-100 transition-all duration-300 rounded-[25px] p-3">
       <div className="absolute inset-0 rounded-[25px] bg-charcoal-100 scale-90 opacity-0 group-hover/videoCard:scale-100 group-hover/videoCard:opacity-100 transition-all duration-300 -z-10" />
@@ -36,7 +36,7 @@ export default function VideoCard({creatorName, videoTitle, creatorProfile, view
         </div>
       </div>
       <Link
-        href={videoSrc}
+        href={`/video/${videoId}`}
         className="absolute inset-0 z-10"
         title={videoTitle}
       />
