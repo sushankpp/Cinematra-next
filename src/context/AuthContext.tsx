@@ -11,6 +11,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const fetchUser = async () => {
+      const hasAuthCookie = document.cookie
+        .split(";")
+        .some((c) => c.trim().startsWith("authToken="));
+
+      if (!hasAuthCookie) {
+        setIsLoading(false);
+        return;
+      }
+      
       const { data, error } = await authService.me();
 
       if (error || !data) {
