@@ -31,7 +31,7 @@ export default function VideoCard({creatorName, videoTitle, creatorProfile, view
           </p>
           <div className="flex text-charcoal-500 text-[14px]">
             <span>{views}</span>
-            <span className="before:content-['ΓÇó'] before:mx-2">{postedTime}</span>
+            <span className="before:content-['.'] before:mx-2">{postedTime}</span>
           </div>
         </div>
       </div>

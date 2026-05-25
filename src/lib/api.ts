@@ -23,3 +23,15 @@ export async function apiCall<T>(
     return { data: null, error: (error as Error).message };
   }
 }
+
+export const getVideos = async () => {
+  const res = await fetch(`${BASE_URL}/videos`);
+  if (!res.ok) throw new Error("Failed to fetch videos");
+  return res.json();
+}
+
+export const getVideo = async (id : string) =>{
+  const res = await fetch(`${BASE_URL}/videos/${id}`);
+  if(!res.ok) throw new Error("Failed to fetch video");
+  return res.json();
+}

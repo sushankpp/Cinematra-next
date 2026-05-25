@@ -1,5 +1,6 @@
 import { VideoPlayer } from "@/components/sections/video/VideoPlayer";
 import Container from "@/components/ui/Container";
+import { getVideo } from "@/lib/api";
 
 const videosData = [
   {
@@ -12,13 +13,14 @@ const videosData = [
 
 export default async function VideoPage({ params }: { params: { id: string }}) {
   const { id } = await params;
-  const video = videosData.find(video => video.videoId === id);
+  const video = await getVideo(id);
+  console.log(video);
 
   if(!video) return <p>Video not found</p>
   console.log(video);
   return (
     <Container>
-      <VideoPlayer src={video.src} poster={video.videoThumbnail} title={video.videoTitle} />
+      <VideoPlayer src={video.storage_url} poster={video.thumbnail_url} title={video.title} />
     </Container>
   );
 }
