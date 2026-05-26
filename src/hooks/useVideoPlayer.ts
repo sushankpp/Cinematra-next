@@ -1,17 +1,117 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
+import Hls from "hls.js";
 
-export function useVideoPlayer(src: string) {
+export function useVideoPlayer(src: string, videoId?: string) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const volumeRef = useRef<HTMLDivElement>(null);
+  const hlsRef = useRef<Hls | null>(null);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [fullScreen, setFullScreen] = useState(false);
   const [volume, setVolume] = useState(1);
   const [playerFocused, setPlayerFocused] = useState(false);
+  const [currentQuality, setCurrentQuality] = useState(-1);
+  const [availableQualities, setAvailableQualities] = useState<
+    { index: number; label: string; bitrate: number }[]
+  >([]);
+
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+
+  // HLS js integrations for .m3u8 files
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video || !src) return;
+
+    hlsRef.current?.destroy();
+
+    if (src.includes(".m3u8") && Hls.isSupported()) {
+      const hls = new Hls({
+        startLevel: 1, // start at 720p
+        maxBufferLength: 30,
+        maxMaxBufferLength: 60,
+        abrEwmaDefaultEstimate: 2500000, //assume 2.25Mbps connection initially
+      });
+      hlsRef.current = hls;
+      hls.loadSource(src);
+      hls.attachMedia(video);
+
+      hls.on(Hls.Events.MANIFEST_PARSED, (_, data) => {
+        const qualities = data.levels.map((level, index) => ({
+          index,
+          label: `${level.height}p`,
+          bitrate: level.bitrate,
+        }));
+        setAvailableQualities(qualities);
+        setCurrentQuality(1); //default to 720p
+      });
+
+      hls.on(Hls.Events.LEVEL_SWITCHED, (_, data) => {
+        setCurrentQuality(data.level);
+      });
+    } else if (
+      src.includes(".m3u8") &&
+      video.canPlayType("application/vnd.apple.mpegurl")
+    ) {
+      video.src = src; // for safari , HLS is natively supported
+    } else {
+      video.src = src; // for regular mp4 videos
+    }
+
+    return () => {
+      hlsRef.current?.destroy();
+      hlsRef.current = null;
+    };
+  }, [src]);
+
+  //BOLA quality switching
+  useEffect(() => {
+    if (!videoId || !hlsRef.current || currentQuality != -1) return;
+
+    const interval = setInterval(async () => {
+      const video = videoRef.current;
+      if (!video) return;
+
+      const bufferLevel =
+        video.buffered.length > 0
+          ? video.buffered.end(0) - video.currentTime
+          : 0;
+
+      try {
+        const res = await fetch(
+          `${BASE_URL}/videos/${videoId}/stream-info?buffer=${bufferLevel}`,
+        );
+        const data = await res.json();
+
+        if (hlsRef.current && currentQuality != -1) {
+          hlsRef.current.currentLevel = data.quality_index;
+        }
+      } catch (error) {
+        console.error("Failed to fetch quality prediction", error);
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  },[videoId, currentQuality]);
+
+  const changeQuality = (index : number) =>{
+    if (!hlsRef.current) return;
+
+    if(index === -1) {
+      hlsRef.current.currentLevel = -1;
+      setCurrentQuality(-1);
+    } else {
+      hlsRef.current.currentLevel = index;
+      hlsRef.current.loadLevel = index;
+      setCurrentQuality(index);
+    }
+  }
 
   useEffect(() => {
     const handleFullScreenChange = () => {
@@ -59,9 +159,9 @@ export function useVideoPlayer(src: string) {
     }
 
     const handleMetadata = () => setDuration(video.duration);
-    document.addEventListener("loadedmetadata", handleMetadata);
+    video.addEventListener("loadedmetadata", handleMetadata);
 
-    return () => document.removeEventListener("loadedmetadata", handleMetadata);
+    return () => video.removeEventListener("loadedmetadata", handleMetadata);
   }, []);
 
   useEffect(() => {
@@ -194,6 +294,8 @@ export function useVideoPlayer(src: string) {
     volume,
     fullScreen,
     playerFocused,
+    currentQuality,
+    availableQualities,
     setPlayerFocused,
     handlePlayPause,
     handleSeek,
@@ -206,5 +308,6 @@ export function useVideoPlayer(src: string) {
     setDuration,
     setCurrentTime,
     setIsPlaying,
+    changeQuality
   };
 }

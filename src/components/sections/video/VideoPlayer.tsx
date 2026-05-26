@@ -31,10 +31,9 @@ export function VideoPlayer({
       >
         <video
           ref={videoControls.videoRef}
-          src={src}
           poster={poster}
           preload="auto"
-          className="w-full h-full rounded-lg object-cover"
+          className="w-full h-full rounded-lg"
           onLoadedMetadata={() => {
             videoControls.setDuration(
               videoControls.videoRef.current?.duration || 0,
