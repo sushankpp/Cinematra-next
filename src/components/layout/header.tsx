@@ -13,7 +13,7 @@ import UserProfile from "../ui/UserProfile";
 export default function Header() {
   const {user, isAuthenticated} = useAuth();
   return (
-    <header className="sticky top-0 z-50 bg-charcoal-800">
+    <header className="sticky top-0 z-50 bg-secondary-Body/80 backdrop-blur-md border-b border-[rgba(255,255,255,0.05)]">
       <Container>
         <div className="flex items-center justify-between py-4">
           <Link href="/">

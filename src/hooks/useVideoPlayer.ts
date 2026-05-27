@@ -91,6 +91,8 @@ export function useVideoPlayer(src: string, videoId?: string) {
 
         if (hlsRef.current && currentQuality != -1) {
           hlsRef.current.currentLevel = data.quality_index;
+          hlsRef.current.loadLevel = data.quality_index; // set load level to avoid auto switching by hls.js based on its own estimation
+          hlsRef.current.nextLevel = data.quality_index; // set next level to avoid auto switching by hls.js
         }
       } catch (error) {
         console.error("Failed to fetch quality prediction", error);
@@ -98,12 +100,12 @@ export function useVideoPlayer(src: string, videoId?: string) {
     }, 3000);
 
     return () => clearInterval(interval);
-  },[videoId, currentQuality]);
+  }, [videoId, currentQuality]);
 
-  const changeQuality = (index : number) =>{
+  const changeQuality = (index: number) => {
     if (!hlsRef.current) return;
 
-    if(index === -1) {
+    if (index === -1) {
       hlsRef.current.currentLevel = -1;
       setCurrentQuality(-1);
     } else {
@@ -111,7 +113,7 @@ export function useVideoPlayer(src: string, videoId?: string) {
       hlsRef.current.loadLevel = index;
       setCurrentQuality(index);
     }
-  }
+  };
 
   useEffect(() => {
     const handleFullScreenChange = () => {
@@ -308,6 +310,6 @@ export function useVideoPlayer(src: string, videoId?: string) {
     setDuration,
     setCurrentTime,
     setIsPlaying,
-    changeQuality
+    changeQuality,
   };
 }

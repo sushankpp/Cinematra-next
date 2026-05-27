@@ -44,12 +44,12 @@ export function TrendingSlider() {
   const scrollNext = () => emblaApi?.scrollNext();
 
   return (
-    <div className="mb-6 mt-6 border-b border-charcoal-200/10 pb-6">
+    <div className="mb-6 mt-6 border-b border-tertiary-Shade pb-6">
       <Container>
         <div className="flex justify-between items-center mb-6">
           <Heading
             text="Trending Now"
-            className="font-tenor text-charcoal-900 text-[32px]"
+            className="font-headline text-primary-text text-[48px] font-bold"
           />
           <Link
             href="trending"

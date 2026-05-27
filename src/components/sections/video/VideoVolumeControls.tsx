@@ -27,13 +27,13 @@ export function VideoVolumeControls({ ...props }: VideoControlProps) {
           >
             {/* Fill */}
             <div
-              className="h-full bg-gold-500 rounded-full"
+              className="h-full bg-red-500 rounded-full"
               style={{ width: `${props.volume * 100}%` }}
             />
 
             {/* Thumb */}
             <div
-              className="absolute top-1/2 w-3 h-3 bg-gold-500 rounded-full"
+              className="absolute top-1/2 w-3 h-3 bg-red-500 rounded-full"
               style={{
                 left: `${props.volume * 100}%`,
                 transform: "translate(-50%, -50%)",

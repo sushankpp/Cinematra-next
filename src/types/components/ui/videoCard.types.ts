@@ -1,11 +1,13 @@
-export interface VideoCardProps {
-  creatorProfile: string;
+export interface VideoCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  creatorProfile?: string;
   videoTitle: string;
   creatorName: string;
   views: string;
   postedTime: string;
   videoThumbnail: string;
   videoId: string;
+  className?: string;
+  variant? : "default" | "compact";
 }
 
 export interface Video {
@@ -17,6 +19,7 @@ export interface Video {
   users: {
     first_name: string;
     last_name: string;
-    creator_profile: string;
+    creator_profile?: string;
   }
+  views: string;
 }

@@ -9,12 +9,12 @@ export function VideoProgressControls({ ...props }: VideoControlProps) {
       onMouseDown={props.handleMouseDown}
     >
       <div
-        className="h-full bg-gold-500 rounded-full relative"
+        className="h-full bg-red-500 rounded-full relative"
         style={{
           width: `${(props.currentTime / props.duration) * 100}%`,
         }}
       >
-        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-gold-500 rounded-full"></div>
+        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-red-500 rounded-full"></div>
       </div>
     </div>
   );

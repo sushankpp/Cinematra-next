@@ -19,16 +19,16 @@ export function TrendingCard({ title, creatorName, videoSrc, likes, comment, dur
         >
           Your browser does not support the video tag.
         </video>
-        <div className="absolute inset-0 rounded-lg bg-black/30 group-hover/card:bg-black/60 transition-all duration-300"></div>
+        <div className="absolute inset-0 rounded-lg bg-black/40 group-hover/card:bg-black/60 transition-all duration-300"></div>
         <div>
           <div className="absolute w-full top-4 flex justify-between px-4">
             <div className="">
               <Heading
                 text={title}
                 level={2}
-                className="left-4 text-brand-100 font-bebas text-[32px]"
+                className="left-4 text-brand-100 font-body text-[32px] font-[600] text-primary-text"
               />
-              <span className="flex">
+              <span className="flex text-red-text">
                 by
                 <Link
                   href={videoSrc}
@@ -49,16 +49,16 @@ export function TrendingCard({ title, creatorName, videoSrc, likes, comment, dur
           </div>
           <PlayCircleIcon
             size={100}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-charcoal-100 cursor-pointer group-hover/card:text-charcoal-50 transition-all duration-300"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-tertiary-Shade cursor-pointer group-hover/card:text-red-text transition-all duration-300"
           />
           <div className="absolute w-full px-4 bottom-4 flex justify-between opacity-0 group-hover/card:opacity-100 transition-all duration-300 group-hover/card:translate-y-1">
             <div>
-              <p className="text-charcoal-100 text-[18px] font-bebas">{duration}</p>
+              <p className="text-red-text text-[18px] font-body">{duration}</p>
             </div>
             <div className="flex gap-4">
               <div className="flex  gap-2 justify-center">
                 <ThumbsUp size={20} className="text-white cursor-pointer" />
-                <p className="text-charcoal-50 font-bebas tracking-[1px]">
+                <p className="text-primary-text font-bebas tracking-[1px]">
                   {likes}
                 </p>
               </div>
@@ -67,7 +67,7 @@ export function TrendingCard({ title, creatorName, videoSrc, likes, comment, dur
                   size={20}
                   className="text-white cursor-pointer"
                 />
-                <p className="text-charcoal-50 font-bebas tracking-[1px]">
+                <p className="text-primary-text font-bebas tracking-[1px]">
                   {comment}
                 </p>
               </div>

@@ -21,7 +21,7 @@ export function VideoPlayer({
       <Heading
         level={1}
         text={title}
-        className="text-[48px] text-charcoal-900 font-bebas font-bold leading-tight tracking-wide mb-4"
+        className="text-[48px] text-primary-text font-headline font-bold leading-tight tracking-wide mb-4"
       />
       <div
         className="relative h-[500px] rounded-lg overflow-hidden bg-black cursor-pointer"

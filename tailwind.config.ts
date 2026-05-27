@@ -20,48 +20,30 @@ export default {
         xl: "1440px",
       },
       fontFamily: {
-        tenor: ["Tenor Sans", "sans-serif"],
-        inter: ["Inter", "sans-serif"],
-        bebas: ["Bebas Neue", "cursive"],
-        sourceSerif: ["Source Serif 4", "serif"],
+        // Primary fonts for the new theme
+        headline: ["Playfair Display", "serif"],
+        body: ["Hanken Grotesk", "sans-serif"],
       },
       colors: {
-        brand: {
-          50: "#f5f7ff",
-          100: "#e0e7ff",
-          500: "#4f6ef7",
-          600: "#3451d1",
-          900: "#1a2a6c",
+        primary: {
+          text: "#F5EEE8",
+          active: "#e50914",
         },
-        cream: {
-          50: "#F5ECD7",
-          100: "#FAF3E0",
+        secondary: {
+          DEFAULT: "#FFB800",
+          Body: "#131314",
         },
-        gold: {
-          50: "#fff8e7",
-          100: "#ffedb3",
-          500: "#f5c518",
-          600: "#d4a800",
+        tertiary: {
+          DEFAULT: "#0F172A",
+          Shade: "#6B7280",
         },
-        charcoal: {
-          50: "#f5f5f5",
-          100: "#e0e0e0",
-          500: "#8a8a8a",
-          600: "#1E1B2E",
-          800: "#2D2B3D",
-          900: "#0f0f0f",
-        },
-        blue: {
-          50: "#3d3a50",
-          100: "#7c5cbf",
-          150: "#2d2b3d",
-          200: "#322f45"
+        neutral: {
+          DEFAULT: "#0A0A0B",
+          Shade: "#0e0e0f",
         },
         red: {
-          50: "#ffe5e5",
-          100: "#ffb3b3",
-          500: "#e50914",
-          600: "#b8070f",
+          500: "#E50914",
+          text: "#E8B4A8",
         },
       },
     },

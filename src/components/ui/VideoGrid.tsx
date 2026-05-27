@@ -27,7 +27,7 @@ export function VideoGrid() {
     <section className="mb-4 pt-8 pb-8">
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {videos.map((video, index) => (
+          {videos.map((video, _) => (
             <VideoCard key={video.id} creatorProfile={video.users.creator_profile || "/default-profile.jpg"} videoId={video.id} videoTitle={video.title} videoThumbnail={video.thumbnail_url} postedTime={new Date(video.created_at).toLocaleDateString()} creatorName={`${video.users.first_name} ${video.users.last_name}`} views="0 views"/>
           ))}
         </div>
