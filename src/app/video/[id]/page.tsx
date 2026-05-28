@@ -1,4 +1,5 @@
 import { RelatedVideos } from "@/components/sections/video/RelatedVideos";
+import { VideoInfo } from "@/components/sections/video/VideoInfo";
 import { VideoPlayer } from "@/components/sections/video/VideoPlayer";
 import Container from "@/components/ui/Container";
 import VideoCard from "@/components/ui/VideoCard";
@@ -27,7 +28,7 @@ export default async function VideoPage({
     (v: { id: string }) => v.id !== video.id,
   );
   return (
-    <Container>
+    <Container size="xl">
       <div className="flex gap-6">
         <div className="flex-1">
           <VideoPlayer
@@ -35,10 +36,11 @@ export default async function VideoPage({
             poster={video.thumbnail_url}
             title={video.title}
           />
+          <VideoInfo video={video} />
         </div>
-        <div className="w-[380px] shrink-0">
+        <aside className="w-[380px] shrink-0">
           <RelatedVideos videos={relatedVideos} />
-        </div>
+        </aside>
       </div>
     </Container>
   );

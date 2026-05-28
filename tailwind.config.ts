@@ -30,21 +30,22 @@ export default {
           active: "#e50914",
         },
         secondary: {
-          DEFAULT: "#FFB800",
+          default: "#FFB800",
           Body: "#131314",
         },
         tertiary: {
-          DEFAULT: "#0F172A",
+          default: "#0F172A",
           Shade: "#6B7280",
         },
         neutral: {
-          DEFAULT: "#0A0A0B",
+          default: "#0A0A0B",
           Shade: "#0e0e0f",
         },
         red: {
           500: "#E50914",
           text: "#E8B4A8",
         },
+        skeleton: "rgba(255, 255, 255, 0.08)",
       },
     },
   },

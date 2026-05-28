@@ -1,28 +1,8 @@
-"use client";
-
 import { Video } from "@/types/components/ui/videoCard.types";
 import Container from "./Container";
 import VideoCard from "./VideoCard";
-import { getVideos } from "@/lib/api";
-import { useEffect, useState } from "react";
 
-
-export function VideoGrid() {
-  const [videos, setVideos] = useState<Video[]>([]);
-
-  useEffect(()=>{
-    async function fetchVideos() {
-      try {
-        const data = await getVideos();
-        setVideos(data);
-        console.log(data);
-      } catch {
-        console.error("Failed to fetch videos");
-      }
-    }
-    fetchVideos();
-  }, []);
-
+export function VideoGrid({videos}: {videos: Video[]}) {
   return (
     <section className="mb-4 pt-8 pb-8">
       <Container>

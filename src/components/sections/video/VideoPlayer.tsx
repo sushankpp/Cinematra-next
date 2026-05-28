@@ -18,11 +18,6 @@ export function VideoPlayer({
       className="relative w-full group/player mt-6"
       aria-label="Video Player"
     >
-      <Heading
-        level={1}
-        text={title}
-        className="text-[48px] text-primary-text font-headline font-bold leading-tight tracking-wide mb-4"
-      />
       <div
         className="relative h-[500px] rounded-lg overflow-hidden bg-black cursor-pointer"
         ref={videoControls.containerRef}
