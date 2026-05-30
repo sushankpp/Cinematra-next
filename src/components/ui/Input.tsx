@@ -6,7 +6,8 @@ export default function Input({ type, className, ...props }: InputProps) {
     <input
       type={type}
       className={cn(
-        "border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2", className
+        "border border-gray-300 focus:outline-none px-2",
+        className
       )}
       {...props}
     />

@@ -1,5 +1,6 @@
 export interface VideoCardProps extends React.HTMLAttributes<HTMLDivElement> {
     video: {
+        id: string;
         title: string;
         description?: string;
         views: string;

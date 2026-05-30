@@ -9,29 +9,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const hasAuthCookie = document.cookie
-        .split(";")
-        .some((c) => c.trim().startsWith("authToken="));
+  const fetchUser = async () => {  
+    const { data, error } = await authService.me();
 
-      if (!hasAuthCookie) {
-        setIsLoading(false);
-        return;
-      }
-      
-      const { data, error } = await authService.me();
+    if (error || !data) {
+      setUser(null);
+    } else {
+      setUser(data.user);
+      console.log("User data fetched successfully:", data.user);
+    }
+    setIsLoading(false);
+  };
 
-      if (error || !data) {
-        setUser(null);
-      } else {
-        setUser(data.user);
-        console.log("User data fetched successfully:", data.user);
-      }
-      setIsLoading(false);
-    };
+  useEffect(() =>{
     fetchUser();
-  }, []);
+  },[]);
+
+  const refreshUser = () => fetchUser();
 
   const Logout = async () => {
     authService.logout();
@@ -40,7 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoading, isAuthenticated: !!user, logout: Logout }}
+      value={{ user, isLoading, isAuthenticated: !!user, logout: Logout , refreshUser }}
     >
       {children}
     </AuthContext.Provider>

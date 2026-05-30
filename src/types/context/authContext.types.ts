@@ -13,4 +13,5 @@ export type AuthContextType = {
     isLoading: boolean;
     isAuthenticated: boolean;
     logout: () => void;
+    refreshUser: () => void;
 }

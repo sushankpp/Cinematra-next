@@ -13,7 +13,7 @@ export default function UserButton() {
     <Button
       variant="ghost"
       iconPosition="right"
-      className="flex items-center gap-2 px-3 py-2 text-white hover:text-charcoal-900"
+      className="flex items-center gap-2 px-3 py-2 text-white hover:text-red-text transition-colors duration-300 ease-in-out"
       text="User Login"
       icon={<User size={20} />}
       onClick={handleAuth}

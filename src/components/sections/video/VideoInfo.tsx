@@ -1,15 +1,16 @@
 "use client";
-import Image from "@/components/ui/Image";
-import { Heading } from "../../ui/Heading";
 import { VideoCardProps } from "@/types/components/sections/video/videoInfo.types";
-import Button from "@/components/ui/Button";
 import { useState, useEffect, useRef } from "react";
+import { Heading } from "../../ui/Heading";
+import Button from "@/components/ui/Button";
+import Image from "@/components/ui/Image";
+import { VideoComments } from "./VideoComments";
 
 export function VideoInfo({ video }: VideoCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
   const descRef = useRef<HTMLParagraphElement>(null);
-
+  
   useEffect(() => {
     const el = descRef.current;
     if (!el) return;
@@ -27,7 +28,7 @@ export function VideoInfo({ video }: VideoCardProps) {
   };
 
   return (
-    <div className="">
+    <div>
       <Heading
         level={1}
         text={video.title}
@@ -70,16 +71,14 @@ export function VideoInfo({ video }: VideoCardProps) {
         >
           {video.description}
         </p>
-        {(isClamped) && (
+        {isClamped && (
           <span className="text-[14px] font-semibold text-primary-text mt-2 inline-block">
             {expanded ? "Show less" : "....Show more"}
           </span>
         )}
       </div>
       {/* comments  */}
-      <div className="">
-        <Heading level={3} text="3,200 Comments" className="text-[24px] text-primary-text font-headline font-bold leading-tight tracking-wide mt-6" />
-      </div>
+      <VideoComments videoId={video.id} />
     </div>
   );
 }

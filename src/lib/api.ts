@@ -28,10 +28,21 @@ export const getVideos = async () => {
   const res = await fetch(`${BASE_URL}/videos`);
   if (!res.ok) throw new Error("Failed to fetch videos");
   return res.json();
-}
+};
 
-export const getVideo = async (id : string) =>{
+export const getVideo = async (id: string) => {
   const res = await fetch(`${BASE_URL}/videos/${id}`);
-  if(!res.ok) throw new Error("Failed to fetch video");
+  if (!res.ok) throw new Error("Failed to fetch video");
   return res.json();
-}
+};
+
+export const postComment = async (videoId: string, comment: string) => {
+  const res = await fetch(`${BASE_URL}/comments`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ videoId, comment }),
+  });
+  if (!res.ok) throw new Error("Failed to post comment");
+  return res.json();
+};
