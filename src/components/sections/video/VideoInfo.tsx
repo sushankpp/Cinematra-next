@@ -5,12 +5,38 @@ import { Heading } from "../../ui/Heading";
 import Button from "@/components/ui/Button";
 import Image from "@/components/ui/Image";
 import { VideoComments } from "./VideoComments";
+import { formatNumber } from "@/lib/formatNumber";
+import { subscribe, getSubscriptions } from "@/lib/api";
 
-export function VideoInfo({ video }: VideoCardProps) {
+export function VideoInfo({ video, subscriptionCount }: VideoCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
   const descRef = useRef<HTMLParagraphElement>(null);
-  
+  const [subCount, setSubCount] = useState(subscriptionCount);
+  const [loadingSub, setLoadingSub] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  console.log("VideoInfo :", video);
+
+  const handleSubscribe = async () => {
+    const previousCount = subCount;
+
+    // optimistic UI
+    setLoadingSub(true);
+    setSubCount((prev) => prev + 1);
+
+    try {
+      const res = await subscribe(video.user_id);
+      if (!res) throw new Error("Subscription failed");
+      setIsSubscribed(true);
+    } catch (error) {
+      console.error("Error subscribing:", error);
+      setSubCount(previousCount);
+    } finally {
+      setLoadingSub(false);
+    }
+  };
+
   useEffect(() => {
     const el = descRef.current;
     if (!el) return;
@@ -46,15 +72,17 @@ export function VideoInfo({ video }: VideoCardProps) {
           <div className="ml-2">
             <p className="text-[18px] text-primary-text">{`${video.users.first_name} ${video.users.last_name}`}</p>
             <p className="text-[14px] text-red-text">
-              {video.subscriberCount || "3,200"} Followers
+              {formatNumber(subCount)}
             </p>
           </div>
         </div>
         <div className="ml-auto flex-1">
           <Button
             variant="primary"
-            className="px-4 py-2 rounded-full hover:bg-primary-text hover:text-primary-active transition-all duration-300 ease-in-out text-[16px]"
-            text="Subscribe"
+            className={"px-4 py-2 rounded-full hover:bg-primary-text hover:text-primary-active transition-all duration-300 ease-in-out text-[16px]" + (isSubscribed ? " bg-tertiary-Shade" : "")}
+            text={isSubscribed ? "Subscribed" : "Subscribe"}
+            onClick={handleSubscribe}
+            disabled={loadingSub}
           />
         </div>
       </div>

@@ -2,10 +2,12 @@ import Image from "./Image";
 import { User } from "@/types/context/authContext.types";
 import { useState } from "react";
 import OptionsDropdown from "./OptionsDropdown";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function UserProfile({ user }: { user: User }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const fullName = `${user.first_name} ${user.last_name}`;
+  const { logout } = useAuth();
 
   const handleDropDownToggle = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -39,6 +41,12 @@ export default function UserProfile({ user }: { user: User }) {
         alt={fullName}
         name={fullName}
         isOpen={isDropdownOpen}
+        items ={
+          [ 
+            { label: "Profile", href: "/profile" },
+            { label: "Logout", onClick: logout , className: "text-red-text" },
+          ]
+        }
       />
     </div>
   );

@@ -3,7 +3,7 @@ import { VideoInfo } from "@/components/sections/video/VideoInfo";
 import { VideoPlayer } from "@/components/sections/video/VideoPlayer";
 import Container from "@/components/ui/Container";
 import VideoCard from "@/components/ui/VideoCard";
-import { getVideo, getVideos } from "@/lib/api";
+import { getVideo, getVideos, getSubscriptionCount } from "@/lib/api";
 
 const videosData = [
   {
@@ -21,6 +21,7 @@ export default async function VideoPage({
 }) {
   const { id } = await params;
   const [video, allVideos] = await Promise.all([getVideo(id), getVideos()]);
+  const subscriptionCount = await getSubscriptionCount(video.user_id);
 
   if (!video) return <p>Video not found</p>;
 
@@ -36,7 +37,7 @@ export default async function VideoPage({
             poster={video.thumbnail_url}
             title={video.title}
           />
-          <VideoInfo video={video} />
+          <VideoInfo video={video} subscriptionCount={subscriptionCount} />
         </div>
         <aside className="w-[380px] shrink-0">
           <RelatedVideos videos={relatedVideos} />

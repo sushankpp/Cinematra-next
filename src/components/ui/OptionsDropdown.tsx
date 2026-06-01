@@ -1,35 +1,42 @@
 import Image from "./Image";
 import { optionsDropdownProps } from "@/types/components/ui/optionsDropdown";
 import NavItem from "../layout/nav/NavItem";
-import { useContext } from "react";
-import { AuthContext } from "@/context/AuthContext";
 
 export default function OptionsDropdown({
-  src,
-  alt,
-  name,
-  isOpen,
-  ...props
+  src, alt, name, isOpen, items, ...props
 }: optionsDropdownProps) {
-    const {logout } = useContext(AuthContext)!;
   return (
     <div
-      className={`p-2 rounded-lg bg-charcoal-500 absolute right-0 w-[250px] top-[50px] z-10 transition-all duration-300 ease-in-out ${isOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-2 pointer-events-none"}`}
+      className={`p-2 rounded-lg bg-tertiary-Shade absolute right-0 w-[250px] top-[50px] z-10 
+                  transition-all duration-300 ease-in-out 
+                  ${isOpen
+                    ? "opacity-100 translate-y-0 pointer-events-auto"
+                    : "opacity-0 -translate-y-2 pointer-events-none"}`}
+      {...props}
     >
-      <div className="flex flex-row items-center gap-2">
-        <figure className="w-[50px] h-[50px]">
-          <Image
-            src={src}
-            alt={alt}
-            width={50}
-            height={50}
-            className="rounded-full"
+      {/* header — only show if name/src provided */}
+      {(src || name) && (
+        <div className="flex flex-row items-center gap-2 pb-2 border-b border-white/10">
+          {src && (
+            <figure className="w-[50px] h-[50px]">
+              <Image src={src} alt={alt ?? ""} width={50} height={50} className="rounded-full" />
+            </figure>
+          )}
+          {name && <p>{name}</p>}
+        </div>
+      )}
+
+      {/* dynamic items */}
+      <div className="flex flex-col mt-1">
+        {items.map((item, i) => (
+          <NavItem
+            key={i}
+            href={item.href ?? ""}
+            label={item.label}
+            onClick={item.onClick}
+            className={item.className}
           />
-        </figure>
-        <p>{name}</p>
-      </div>
-      <div>
-        <NavItem href="" label="Log Out" onClick={logout} />
+        ))}
       </div>
     </div>
   );

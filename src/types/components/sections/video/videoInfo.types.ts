@@ -5,7 +5,7 @@ export interface VideoCardProps extends React.HTMLAttributes<HTMLDivElement> {
         description?: string;
         views: string;
         created_at: string;
-        subscriberCount?: string;
+        user_id: string;
         likes?: string;
         dislikes?: string;
         users: {
@@ -14,4 +14,5 @@ export interface VideoCardProps extends React.HTMLAttributes<HTMLDivElement> {
             creator_profile?: string;
         }
     }
+    subscriptionCount: number;
 }
