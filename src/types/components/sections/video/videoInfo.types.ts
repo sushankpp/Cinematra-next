@@ -14,5 +14,5 @@ export interface VideoCardProps extends React.HTMLAttributes<HTMLDivElement> {
             creator_profile?: string;
         }
     }
-    subscriptionCount: number;
+    subscriptionCount?: number;
 }

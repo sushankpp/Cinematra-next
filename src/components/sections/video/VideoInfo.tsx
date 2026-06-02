@@ -6,36 +6,33 @@ import Button from "@/components/ui/Button";
 import Image from "@/components/ui/Image";
 import { VideoComments } from "./VideoComments";
 import { formatNumber } from "@/lib/formatNumber";
-import { subscribe, getSubscriptions } from "@/lib/api";
+import { useSubscription } from "@/hooks/useSubscription";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
-export function VideoInfo({ video, subscriptionCount }: VideoCardProps) {
+export function VideoInfo({ video }: VideoCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
   const descRef = useRef<HTMLParagraphElement>(null);
-  const [subCount, setSubCount] = useState(subscriptionCount);
-  const [loadingSub, setLoadingSub] = useState(false);
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const {
+    subCount,
+    isSubscribed,
+    loadingCount,
+    loadingSub,
+    handleSubscribe,
+    handleUnsubscribe,
+  } = useSubscription(video.user_id);
 
   console.log("VideoInfo :", video);
-
-  const handleSubscribe = async () => {
-    const previousCount = subCount;
-
-    // optimistic UI
-    setLoadingSub(true);
-    setSubCount((prev) => prev + 1);
-
-    try {
-      const res = await subscribe(video.user_id);
-      if (!res) throw new Error("Subscription failed");
-      setIsSubscribed(true);
-    } catch (error) {
-      console.error("Error subscribing:", error);
-      setSubCount(previousCount);
-    } finally {
-      setLoadingSub(false);
-    }
-  };
 
   useEffect(() => {
     const el = descRef.current;
@@ -72,18 +69,57 @@ export function VideoInfo({ video, subscriptionCount }: VideoCardProps) {
           <div className="ml-2">
             <p className="text-[18px] text-primary-text">{`${video.users.first_name} ${video.users.last_name}`}</p>
             <p className="text-[14px] text-red-text">
-              {formatNumber(subCount)}
+              {loadingCount ? "..." : formatNumber(subCount)}
             </p>
           </div>
         </div>
         <div className="ml-auto flex-1">
-          <Button
-            variant="primary"
-            className={"px-4 py-2 rounded-full hover:bg-primary-text hover:text-primary-active transition-all duration-300 ease-in-out text-[16px]" + (isSubscribed ? " bg-tertiary-Shade" : "")}
-            text={isSubscribed ? "Subscribed" : "Subscribe"}
-            onClick={handleSubscribe}
-            disabled={loadingSub}
-          />
+          {isSubscribed ? (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="primary"
+                  className={
+                    "px-4 py-2 rounded-full transition-all duration-300 ease-in-out text-[16px]" +
+                    " bg-tertiary-Shade"
+                  }
+                  text="Subscribed"
+                  disabled={loadingSub}
+                />
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Unsubscribe from this channel?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    You&apos;ll stop receiving updates from {video.users.first_name} {video.users.last_name} until you subscribe again.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel variant="tertiary" className="text-tertiary-default">
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    variant="primary"
+                    onClick={handleUnsubscribe}
+                    disabled={loadingSub}
+                  >
+                    Unsubscribe
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          ) : (
+            <Button
+              variant="primary"
+              className={
+                "px-4 py-2 rounded-full transition-all duration-300 ease-in-out text-[16px]" +
+                " bg-red-500 text-primary-text hover:bg-primary-text hover:text-primary-active "
+              }
+              text="Subscribe"
+              onClick={handleSubscribe}
+              disabled={loadingSub}
+            />
+          )}
         </div>
       </div>
 

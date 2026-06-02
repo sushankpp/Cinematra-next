@@ -101,8 +101,9 @@ export const getSubscriptionCount = async (channelId: string) => {
     method: "GET",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
+    cache: "no-store",
   });
   if (!res.ok) throw new Error("Failed to fetch subscription count");
   const json = await res.json();
-  return json.subscriber_count as number;
+  return Number(json.subscriber_count);
 };

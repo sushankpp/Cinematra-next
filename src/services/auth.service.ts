@@ -28,5 +28,12 @@ export const authService = {
     apiCall("/auth/logout", {
       method: "POST",
     })
+  },
+
+  updateProfile: (payload: Partial<RegisterPayload>) => {
+    return apiCall("/auth/update", {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    })
   }
 };

@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import NextTopLoader from "nextjs-toploader";
+import { Toaster } from "sonner";
+import { cn } from "@/lib/util";
+
+const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
     >
       <body className="min-h-full flex flex-col bg-secondary-Body">
         <NextTopLoader color="#e50914" height={3} showSpinner={false} />
@@ -43,6 +47,7 @@ export default function RootLayout({
           <main>
           {children}
           </main>
+          <Toaster position="top-right" richColors />
           <Footer />
         </AuthProvider>
       </body>

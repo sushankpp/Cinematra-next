@@ -41,12 +41,10 @@ export default function UserProfile({ user }: { user: User }) {
         alt={fullName}
         name={fullName}
         isOpen={isDropdownOpen}
-        items ={
-          [ 
-            { label: "Profile", href: "/profile" },
-            { label: "Logout", onClick: logout , className: "text-red-text" },
-          ]
-        }
+        items={[
+          { label: "Profile", href: `/profile/${user.id}` },
+          { label: "Logout", onClick: logout, className: "text-red-text" },
+        ]}
       />
     </div>
   );
