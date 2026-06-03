@@ -1,3 +1,5 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterFormData } from "@/schemas/registerSchema";
@@ -11,8 +13,10 @@ import { authService } from "@/services/auth.service";
 
 export function RegisterForm() {
   const router = useRouter();
+
   const [serverError, setServerError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+
   const {
     watch,
     register,
@@ -22,6 +26,7 @@ export function RegisterForm() {
     resolver: zodResolver(registerSchema),
     mode: "onBlur",
   });
+
   const password = watch("password");
 
   const onSubmit = async (data: RegisterFormData) => {
@@ -43,161 +48,219 @@ export function RegisterForm() {
     if (res) {
       router.push("/");
     }
-    console.log(data);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+
       {serverError && (
-        <div className="mb-4 p-3 rounded-md bg-red-500/10 border border-red-500/20">
-          <p className="text-red-400 text-sm">{serverError}</p>
+        <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-3">
+          <p className="text-red-text text-sm">{serverError}</p>
         </div>
       )}
-      <div className="relative grid md:grid-cols-2 gap-4">
-        <div className="relative">
-          <label htmlFor="firstName" className="sr-only">
-            First Name
-          </label>
+
+      <div className="grid md:grid-cols-2 gap-4">
+
+        <div>
           <Input
-            id="firstName"
-            type="text"
-            placeholder="Enter your first name"
+            placeholder="First Name"
             {...register("firstName")}
-            className="w-full placeholder:text-charcoal-500 text-white bg-blue-150 active:bg-blue-200 focus:ring-blue-50 border-none p-3 rounded-md focus:ring-2 transition-all duration-200"
+            className="
+            w-full
+            bg-neutral-Shade
+            text-primary-text
+            placeholder:text-tertiary-Shade
+            border border-white/10
+            rounded-xl
+            p-3
+            focus:ring-2
+            focus:ring-red-500/40
+            "
           />
+
           {errors.firstName && (
-            <p className="text-red-400 text-sm mt-2">
+            <p className="text-red-text text-sm mt-2">
               {errors.firstName.message}
             </p>
           )}
         </div>
-        <div className="relative">
-          <label htmlFor="lastName" className="sr-only">
-            Last Name
-          </label>
+
+        <div>
           <Input
-            id="lastName"
-            type="text"
-            placeholder="Enter your last name"
+            placeholder="Last Name"
             {...register("lastName")}
-            className="w-full placeholder:text-charcoal-500 text-white bg-blue-150 active:bg-blue-200 focus:ring-blue-50 border-none p-3 rounded-md focus:ring-2 transition-all duration-200"
+            className="
+            w-full
+            bg-neutral-Shade
+            text-primary-text
+            placeholder:text-tertiary-Shade
+            border border-white/10
+            rounded-xl
+            p-3
+            focus:ring-2
+            focus:ring-red-500/40
+            "
           />
+
           {errors.lastName && (
-            <p className="text-red-400 text-sm mt-2">
+            <p className="text-red-text text-sm mt-2">
               {errors.lastName.message}
             </p>
           )}
         </div>
+
       </div>
-      <div className="relative mt-4 mb-4">
-        <label htmlFor="email" className="sr-only">
-          Email
-        </label>
+
+      <div>
         <Input
-          id="email"
           type="email"
-          placeholder="Enter your email"
+          placeholder="Email Address"
           {...register("email")}
-          className="w-full placeholder:text-charcoal-500 text-white bg-blue-150 active:bg-blue-200 focus:ring-blue-50 border-none p-3 rounded-md focus:ring-2 transition-all duration-200"
+          className="
+          w-full
+          bg-neutral-Shade
+          text-primary-text
+          placeholder:text-tertiary-Shade
+          border border-white/10
+          rounded-xl
+          p-3
+          focus:ring-2
+          focus:ring-red-500/40
+          "
         />
+
         {errors.email && (
-          <p className="text-red-400 text-sm mt-2">{errors.email.message}</p>
-        )}
-      </div>
-      <div className="relative mt-4 mb-4">
-        <label htmlFor="phone" className="sr-only">
-          Phone Number
-        </label>
-        <Input
-          id="phone"
-          type="tel"
-          placeholder="Enter your phone number"
-          {...register("phone")}
-          className="w-full placeholder:text-charcoal-500 text-white bg-blue-150 active:bg-blue-200 focus:ring-blue-50 border-none p-3 rounded-md focus:ring-2 transition-all duration-200"
-        />
-        {errors.phone && (
-          <p className="text-red-400 text-sm mt-2">{errors.phone.message}</p>
-        )}
-      </div>
-      <div className="relative mt-4 mb-4">
-        <label htmlFor="password" className="sr-only">
-          Password
-        </label>
-        <Input
-          id="password"
-          type={showPassword ? "text" : "password"}
-          placeholder="Enter your password"
-          {...register("password")}
-          className="w-full placeholder:text-charcoal-500 text-white bg-blue-150 active:bg-blue-200 focus:ring-blue-50 border-none p-3 rounded-md focus:ring-2 transition-all duration-200"
-        />
-        <Button
-          type="button"
-          variant="none"
-          onClick={() => {
-            setShowPassword((prev) => !prev);
-          }}
-          className="absolute right-3 top-3 p-0 h-auto"
-        >
-          {showPassword ? (
-            <EyeClosed size={20} className="text-charcoal-500" />
-          ) : (
-            <Eye size={20} className="text-charcoal-500" />
-          )}
-        </Button>
-        {password && (
-          <div className="mt-2">
-            <div className="h-1 w-full bg-charcoal-500 rounded-full">
-              <div
-                className={`h-1 rounded-full transition-all duration-300 ${getPasswordStrength(password)?.color} ${getPasswordStrength(password)?.width}`}
-              ></div>
-            </div>
-            <p className="text-sm mt-1 text-charcoal-100">
-              Strength:
-              <span className="font-medium">
-                {getPasswordStrength(password)?.label}
-              </span>
-            </p>
-          </div>
-        )}
-        {errors.password && (
-          <p className="text-red-400 text-sm mt-2">{errors.password.message}</p>
-        )}
-      </div>
-      <div className="relative mt-4 mb-4">
-        <label htmlFor="confirmPassword" className="sr-only">
-          Confirm Password
-        </label>
-        <Input
-          id="confirmPassword"
-          type={showPassword ? "text" : "password"}
-          placeholder="Confirm your password"
-          {...register("confirmPassword")}
-          className="w-full placeholder:text-charcoal-500 text-white bg-blue-150 active:bg-blue-200 focus:ring-blue-50 border-none p-3 rounded-md focus:ring-2 transition-all duration-200"
-        />
-        <Button
-          type="button"
-          variant="none"
-          onClick={() => setShowPassword((prev) => !prev)}
-          className="absolute right-3 top-3 p-0 h-auto"
-        >
-          {showPassword ? (
-            <EyeClosed size={20} className="text-charcoal-500" />
-          ) : (
-            <Eye size={20} className="text-charcoal-500" />
-          )}
-        </Button>
-        {errors.confirmPassword && (
-          <p className="text-red-400 text-sm mt-2">
-            {errors.confirmPassword.message}
+          <p className="text-red-text text-sm mt-2">
+            {errors.email.message}
           </p>
         )}
       </div>
+
+      <div>
+        <Input
+          type="tel"
+          placeholder="Phone Number"
+          {...register("phone")}
+          className="
+          w-full
+          bg-neutral-Shade
+          text-primary-text
+          placeholder:text-tertiary-Shade
+          border border-white/10
+          rounded-xl
+          p-3
+          focus:ring-2
+          focus:ring-red-500/40
+          "
+        />
+
+        {errors.phone && (
+          <p className="text-red-text text-sm mt-2">
+            {errors.phone.message}
+          </p>
+        )}
+      </div>
+
+      <div className="relative">
+
+        <Input
+          type={showPassword ? "text" : "password"}
+          placeholder="Password"
+          {...register("password")}
+          className="
+          w-full
+          bg-neutral-Shade
+          text-primary-text
+          placeholder:text-tertiary-Shade
+          border border-white/10
+          rounded-xl
+          p-3
+          focus:ring-2
+          focus:ring-red-500/40
+          "
+        />
+
+        <Button
+          type="button"
+          variant="none"
+          className="absolute right-4 top-3"
+          onClick={() => setShowPassword((prev) => !prev)}
+        >
+          {showPassword ? (
+            <EyeClosed className="text-tertiary-Shade" size={20} />
+          ) : (
+            <Eye className="text-tertiary-Shade" size={20} />
+          )}
+        </Button>
+
+        {password && (
+          <div className="mt-3">
+
+            <div className="h-1 rounded-full bg-neutral-default">
+
+              <div
+                className={`h-1 rounded-full transition-all ${getPasswordStrength(password)?.width} ${getPasswordStrength(password)?.color}`}
+              />
+
+            </div>
+
+            <p className="text-primary-text text-sm mt-2">
+              Strength: {getPasswordStrength(password)?.label}
+            </p>
+
+          </div>
+        )}
+
+        {errors.password && (
+          <p className="text-red-text text-sm mt-2">
+            {errors.password.message}
+          </p>
+        )}
+
+      </div>
+
+      <div className="relative">
+
+        <Input
+          type={showPassword ? "text" : "password"}
+          placeholder="Confirm Password"
+          {...register("confirmPassword")}
+          className="
+          w-full
+          bg-neutral-Shade
+          text-primary-text
+          placeholder:text-tertiary-Shade
+          border border-white/10
+          rounded-xl
+          p-3
+          focus:ring-2
+          focus:ring-red-500/40
+          "
+        />
+
+        {errors.confirmPassword && (
+          <p className="text-red-text text-sm mt-2">
+            {errors.confirmPassword.message}
+          </p>
+        )}
+
+      </div>
+
       <Button
         type="submit"
-        text={isSubmitting ? "Creating Account..." : "Create Account"}
         disabled={isSubmitting}
-        className="w-full justify-center rounded-md bg-blue-100 p-3 hover:bg-blue-50 mt-8"
+        text={isSubmitting ? "Creating Account..." : "Create Account"}
+        className="
+        w-full
+        justify-center
+        rounded-xl
+        bg-red-500
+        p-3
+        hover:opacity-90
+        mt-4
+        "
       />
+
     </form>
   );
 }

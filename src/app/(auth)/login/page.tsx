@@ -21,7 +21,7 @@ export default function Login() {
   }
   
   return (
-    <div className="flex p-3 max-w-[1000px] w-full h-[600px] bg-charcoal-600 rounded-md justify-center items-center mx-auto my-auto shadow-lg">
+    <div className="flex p-3 max-w-[1000px] w-full h-[600px] bg-tertiary-Shade rounded-md justify-center items-center mx-auto my-auto shadow-lg">
       <div className="w-[500px] h-full relative">
         <Image
           src="/login-image.jpg"
@@ -42,7 +42,7 @@ export default function Login() {
           <Heading
             level={1}
             text="Welcome Back"
-            className="text-gold-50 text-[50px] font-medium"
+            className="text-red-text text-[50px] font-medium font-headline"
           />
           <p className="text-charcoal-100">
             Don't have an account?

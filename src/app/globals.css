@@ -71,6 +71,17 @@
   animation: shimmer 1.5s infinite;
 }
 
+@layer components {
+  .input-base {
+    @apply w-full rounded-lg bg-white/5 border border-white/10
+           px-3 py-2 text-sm font-body text-primary-text
+           placeholder:text-tertiary-Shade
+           focus:outline-none focus:border-primary-active/50 focus:bg-white/8
+           transition-colors duration-200
+           appearance-none;
+  }
+}
+
 :root {
   --font-headline: "Playfair Display", serif;
   --font-body: "Hanken Grotesk", sans-serif;

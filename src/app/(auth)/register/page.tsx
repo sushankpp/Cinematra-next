@@ -21,7 +21,7 @@ export default function Register() {
   }
 
   return (
-    <div className="flex p-3 max-w-[1000px] w-full min-h-[600px] bg-charcoal-600 rounded-md justify-center items-center mx-auto my-auto shadow-lg ">
+    <div className="flex p-3 max-w-[1000px] w-full min-h-[600px] bg-tertiary-Shade rounded-md justify-center items-center mx-auto my-auto shadow-lg ">
       <div className="w-[500px] self-stretch relative overflow-hidden">
         <Image
           src="/register-image.jpg"
@@ -42,13 +42,13 @@ export default function Register() {
           <Heading
             level={1}
             text="Create an Account"
-            className="text-gold-50 text-[40px] font-medium"
+            className="text-red-text font-headline text-[40px] font-medium"
           />
           <p className="text-charcoal-100">
             Already have an account?
             <Link
               href="/login"
-              className="text-brand-100 ml-2 hover:text-gold-100 underline"
+              className="text-secondary-default ml-2 hover:text-gold-100 underline"
             >
               Log in
             </Link>

@@ -1,3 +1,5 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginFormData } from "@/schemas/loginSchema";
@@ -11,7 +13,9 @@ import { authService } from "@/services/auth.service";
 
 export function LoginForm() {
   const router = useRouter();
+
   const [showPassword, setShowPassword] = useState(false);
+
   const [serverError, setServerError] = useState<string | null>(null);
 
   const {
@@ -20,13 +24,11 @@ export function LoginForm() {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
-
     mode: "onBlur",
   });
 
   const onSubmit = async (data: LoginFormData) => {
     setServerError(null);
-    console.log(data);
 
     const { data: res, error } = await authService.login({
       email: data.email,
@@ -42,67 +44,99 @@ export function LoginForm() {
       router.push("/");
     }
   };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {
-        serverError && (
-          <div className="mb-4 p-3 rounded-md bg-red-500/10 border border-red-500/20">
-            <p className="text-red-400 text-sm">{serverError}</p>
-          </div>
-        )
-      }
-      <div className="relative">
-        <label htmlFor="email" className="sr-only">
-          Email
-        </label>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      {serverError && (
+        <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-3">
+          <p className="text-red-text text-sm">{serverError}</p>
+        </div>
+      )}
+
+      <div>
         <Input
-          id="email"
           type="email"
-          placeholder="Enter your email"
+          placeholder="Email Address"
           {...register("email")}
-          className="w-full placeholder:text-charcoal-500 text-white bg-blue-150 active:bg-blue-200 focus:ring-blue-50 border-none p-3 rounded-md focus:ring-2 transition-all duration-200"
+          className="
+          w-full
+          bg-neutral-Shade
+          text-primary-text
+          placeholder:text-tertiary-Shade
+          border border-white/10
+          rounded-xl
+          p-3
+          focus:ring-2
+          focus:ring-red-500/40
+          "
         />
+
         {errors.email && (
-          <p className="text-red-400 text-sm mt-2">{errors.email.message}</p>
+          <p className="text-red-text text-sm mt-2">{errors.email.message}</p>
         )}
       </div>
-      <div className="relative mt-4 mb-4">
-        <label htmlFor="password" className="sr-only">
-          Password
-        </label>
+
+      <div className="relative">
         <Input
-          id="password"
           type={showPassword ? "text" : "password"}
-          placeholder="Enter your password"
+          placeholder="Password"
           {...register("password")}
-          className="w-full placeholder:text-charcoal-500 text-white bg-blue-150 active:bg-blue-200 focus:ring-blue-50 border-none p-3 rounded-md focus:ring-2 transition-all duration-200"
+          className="
+          w-full
+          bg-neutral-Shade
+          text-primary-text
+          placeholder:text-tertiary-Shade
+          border border-white/10
+          rounded-xl
+          p-3
+          focus:ring-2
+          focus:ring-red-500/40
+          "
         />
-        {errors.password && (
-          <p className="text-red-400 text-sm mt-2">{errors.password.message}</p>
-        )}
+
         <Button
           type="button"
           variant="none"
-          className="absolute right-3 top-3 p-0 h-auto"
+          className="absolute right-0 top-2"
           onClick={() => setShowPassword((prev) => !prev)}
         >
           {showPassword ? (
-            <EyeClosed size={20} className="text-charcoal-500" />
+            <EyeClosed className="text-tertiary-Shade" size={20} />
           ) : (
-            <Eye size={20} className="text-charcoal-500" />
+            <Eye className="text-tertiary-Shade" size={20} />
           )}
         </Button>
+
+        {errors.password && (
+          <p className="text-red-text text-sm mt-2">
+            {errors.password.message}
+          </p>
+        )}
       </div>
+
       <Link
         href="/forgot-password"
-        className="text-brand-100 hover:text-gold-100 underline"
+        className="
+        text-secondary-default
+        underline
+        hover:text-primary-text
+        transition
+        "
       >
         Forgot your password?
       </Link>
+
       <Button
         type="submit"
         text={isSubmitting ? "Logging in..." : "Log In"}
-        className="w-full justify-center rounded-md bg-blue-100 p-3 hover:bg-blue-50 mt-8"
+        className="
+        w-full
+        justify-center
+        rounded-xl
+        bg-red-500
+        p-3 mt-2
+        hover:opacity-90
+        "
       />
     </form>
   );

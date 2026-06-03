@@ -60,7 +60,7 @@ export function VideoInfo({ video }: VideoCardProps) {
       <div className="flex mt-4 items-center gap-5">
         <div className="flex items-center">
           <Image
-            src={video.users.creator_profile || "/default-profile.jpg"}
+            src={video.users.picture || "/default-profile.jpg"}
             alt={`${video.users.first_name} ${video.users.last_name}`}
             width={50}
             height={50}

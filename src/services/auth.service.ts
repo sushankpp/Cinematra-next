@@ -5,6 +5,7 @@ import {
   MeResponse,
 } from "@/types/service/authResponse.types";
 import { apiCall } from "@/lib/api";
+import { User } from "@/types/context/authContext.types";
 
 export const authService = {
   register: (payload: RegisterPayload) =>
@@ -30,9 +31,13 @@ export const authService = {
     })
   },
 
-  updateProfile: (payload: Partial<RegisterPayload>) => {
-    return apiCall("/auth/update", {
+  updateProfile: (
+    payload: Partial<RegisterPayload> & { picture?: string },
+  ) => {
+    return apiCall<MeResponse | null>("/auth/update", {
       method: "PATCH",
+      credentials: "include",
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(payload),
     })
   }

@@ -19,7 +19,7 @@ export interface Video {
   users: {
     first_name: string;
     last_name: string;
-    creator_profile?: string;
+    picture?: string;
   }
   views: string;
 }

@@ -8,7 +8,7 @@ import NavItem from "./nav/NavItem";
 
 export default function Footer() {
   return (
-    <footer className="bg-neutral-Shade text-white mt-8 py-4">
+    <footer className="bg-neutral-Shade text-white mt-8 py-4 z-50">
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           <div>
