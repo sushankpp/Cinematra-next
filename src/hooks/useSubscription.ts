@@ -6,8 +6,10 @@ import {
   unsubscribe,
 } from "@/lib/api";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 export function useSubscription(channelId: string) {
+  const { user } = useAuth();
   const [subCount, setSubCount] = useState(0);
   const [loadingSub, setLoadingSub] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -46,6 +48,11 @@ export function useSubscription(channelId: string) {
 
   const handleSubscribe = async () => {
     const previousCount = subCount;
+
+    if ( !user ) {
+      toast.error("You must be logged in to subscribe.");
+      return;
+    }
 
     setLoadingSub(true);
     setSubCount((prev) => prev + 1);

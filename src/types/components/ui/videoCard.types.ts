@@ -23,3 +23,21 @@ export interface Video {
   }
   views: string;
 }
+
+export interface VideoUploadData {
+  title: string;
+  description: string;
+  thumbnail: File | null;
+  videoFile: File | null;
+  genres: string[];
+  releaseYear: number;
+  contentRating: string;
+  language: string;
+  tags: string[];
+}
+
+export interface GenreFormDB {
+  id: number;
+  name: string;
+  slug: string;
+}

@@ -25,6 +25,7 @@ export default async function VideoPage({
             src={video.storage_url}
             poster={video.thumbnail_url}
             title={video.title}
+            videoId={video.id}
           />
           <VideoInfo video={video} />
         </div>

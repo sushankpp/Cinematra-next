@@ -3,6 +3,7 @@ import { Heading } from "./Heading";
 import Image from "./Image";
 import Link from "./Link";
 import { VideoCardProps } from "@/types/components/ui/videoCard.types";
+import { formatCommentTime } from "@/lib/formatCommentTime";
 export default function VideoCard({
   creatorName,
   videoTitle,
@@ -80,12 +81,12 @@ export default function VideoCard({
               isCompact ? "text-[13px]" : "text-[14px]",
             )}
           >
-            <span>{views}</span>
+            <span>{views} Views</span>
             <span
               className="mx-2 relative w-3 h-3 before:content-[''] before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:bg-current before:w-[4px] before:h-[4px] before:rounded-full"
               aria-hidden="true"
             />
-            <span>{postedTime}</span>
+            <span>{formatCommentTime(postedTime)}</span>
           </div>
         </div>
       </div>

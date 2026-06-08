@@ -1,4 +1,5 @@
 import { ApiResponse } from "../types/lib/api.types";
+import axios from "axios";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
@@ -36,6 +37,28 @@ export const getVideo = async (id: string) => {
   return res.json();
 };
 
+export const uploadVideo = (formData: FormData, onProgress: (percent: number) => void) =>{
+  return axios.post(`${BASE_URL}/videos/upload`, formData, {
+    withCredentials: true,
+    onUploadProgress: (progressEvent) => {
+      if (progressEvent.total) {
+        const percent = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+        onProgress(percent);
+      }
+    },
+  }).then(res => res.data)
+}
+
+export const sendViews = async (videoId: string) => {
+  const res = await fetch(`${BASE_URL}/videos/${videoId}/view`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("Failed to send view");
+  return res.json();
+};
+
 export const postComment = async (videoId: string, comment: string) => {
   const res = await fetch(`${BASE_URL}/comments`, {
     method: "POST",
@@ -52,6 +75,7 @@ export const getComments = async (videoId: string) => {
   if (!res.ok) throw new Error("Failed to fetch comments");
   return res.json();
 };
+
 export const deleteComment = async (commentId: number) => {
   const res = await fetch(`${BASE_URL}/comments/${commentId}`, {
     method: "DELETE",

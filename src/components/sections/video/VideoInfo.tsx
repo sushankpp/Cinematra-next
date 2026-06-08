@@ -18,6 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { formatCommentTime } from "@/lib/formatCommentTime";
 
 export function VideoInfo({ video }: VideoCardProps) {
   const [expanded, setExpanded] = useState(false);
@@ -89,13 +90,20 @@ export function VideoInfo({ video }: VideoCardProps) {
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Unsubscribe from this channel?</AlertDialogTitle>
+                  <AlertDialogTitle>
+                    Unsubscribe from this channel?
+                  </AlertDialogTitle>
                   <AlertDialogDescription>
-                    You&apos;ll stop receiving updates from {video.users.first_name} {video.users.last_name} until you subscribe again.
+                    You&apos;ll stop receiving updates from{" "}
+                    {video.users.first_name} {video.users.last_name} until you
+                    subscribe again.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel variant="tertiary" className="text-tertiary-default">
+                  <AlertDialogCancel
+                    variant="tertiary"
+                    className="text-tertiary-default"
+                  >
                     Cancel
                   </AlertDialogCancel>
                   <AlertDialogAction
@@ -125,9 +133,14 @@ export function VideoInfo({ video }: VideoCardProps) {
 
       {/* description */}
       <div
-        className="bg-[#212121] p-4 rounded-lg mt-6  cursor-pointer hover:bg-[#2a2a2a] transition-colors duration-200 ease-in-out"
+        className="bg-[#212121] p-4 rounded-lg mt-6  cursor-pointer hover:bg-[#2a2a2a] transition-colors duration-200 ease-in-out whitespace-pre-wrap"
         onClick={handleDescriptionToggle}
       >
+        <div className="flex items-center text-sm text-white font-medium font-body mb-2">
+          <span>{video.views} views</span>
+          <span className="mx-2">•</span>
+          <span>{formatCommentTime(video.created_at)}</span>
+        </div>
         <p
           ref={descRef}
           className={`text-[16px] text-primary-text leading-relaxed overflow-hidden transition-all duration-300

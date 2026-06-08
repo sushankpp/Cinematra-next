@@ -1,17 +1,31 @@
 "use client";
-import { Heading } from "@/components/ui/Heading";
 import { VideoPlayerProps } from "@/types/components/sections/video/videoPlayer.types";
-
+import { useRef } from "react";
 import { useVideoPlayer } from "@/hooks/useVideoPlayer";
 import { VideoControls } from "./VideoControls";
+import { sendViews } from "@/lib/api";
 
 export function VideoPlayer({
   src,
   poster,
   title,
+  videoId,
   ...props
 }: VideoPlayerProps) {
   const videoControls = useVideoPlayer(src);
+  const viewSent = useRef(false);
+
+  const handleFirstPlay = () =>{
+    if (!viewSent.current) {
+      viewSent.current = true;
+      console.log("Sending view for video:", videoId);
+      sendViews(videoId).then((res)=>{
+        console.log("View sent successfully for video:", videoId);
+      }).catch(()=>{
+        viewSent.current = false; //ignore if failed
+      })
+    }
+  };
 
   return (
     <section
@@ -39,6 +53,7 @@ export function VideoPlayer({
               videoControls.videoRef.current?.currentTime || 0,
             )
           }
+          onPlay={handleFirstPlay}
           onEnded={() => videoControls.setIsPlaying(false)}
         />
 

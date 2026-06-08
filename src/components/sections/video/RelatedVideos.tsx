@@ -12,7 +12,7 @@ export function RelatedVideos({ videos }: { videos: Video[] }) {
           videoThumbnail={video.thumbnail_url}
           videoTitle={video.title}
           creatorName={`${video.users.first_name} ${video.users.last_name}`}
-          views={video.views || "0 Views"}
+          views={video.views || "0"}
           postedTime={new Date(video.created_at).toLocaleDateString()}
           variant="compact"
         />
