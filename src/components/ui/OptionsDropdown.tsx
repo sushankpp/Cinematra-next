@@ -3,38 +3,57 @@ import { optionsDropdownProps } from "@/types/components/ui/optionsDropdown";
 import NavItem from "../layout/nav/NavItem";
 
 export default function OptionsDropdown({
-  src, alt, name, isOpen, items, ...props
+  src,
+  alt,
+  name,
+  isOpen,
+  items,
+  ...props
 }: optionsDropdownProps) {
   return (
     <div
-      className={`p-2 rounded-lg bg-tertiary-Shade absolute right-0 w-[250px] top-[50px] z-10 
-                  transition-all duration-300 ease-in-out 
-                  ${isOpen
-                    ? "opacity-100 translate-y-0 pointer-events-auto"
-                    : "opacity-0 -translate-y-2 pointer-events-none"}`}
+      className={`absolute right-0 top-[46px] z-50 w-[220px] overflow-hidden rounded-md
+        border border-white/10 bg-neutral-Shade/95 shadow-xl shadow-black/40 backdrop-blur-md
+        transition-all duration-200 ease-out
+        ${
+          isOpen
+            ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
+            : "opacity-0 -translate-y-1 scale-95 pointer-events-none"
+        }`}
       {...props}
     >
-      {/* header — only show if name/src provided */}
       {(src || name) && (
-        <div className="flex flex-row items-center gap-2 pb-2 border-b border-white/10">
+        <div className="flex items-center gap-3 border-b border-white/10 px-3 py-3">
           {src && (
-            <figure className="w-[50px] h-[50px]">
-              <Image src={src} alt={alt ?? ""} width={50} height={50} className="rounded-full" />
+            <figure className="h-10 w-10 shrink-0 overflow-hidden rounded-full ring-1 ring-white/15">
+              <Image
+                src={src}
+                alt={alt ?? ""}
+                width={40}
+                height={40}
+                className="h-full w-full object-cover"
+              />
             </figure>
           )}
-          {name && <p>{name}</p>}
+
+          {name && (
+            <p className="truncate text-sm font-medium text-primary-text">
+              {name}
+            </p>
+          )}
         </div>
       )}
 
-      {/* dynamic items */}
-      <div className="flex flex-col mt-1">
+      <div className="flex flex-col p-1.5">
         {items.map((item, i) => (
           <NavItem
             key={i}
             href={item.href ?? ""}
             label={item.label}
             onClick={item.onClick}
-            className={item.className}
+            className={`rounded px-3 py-2 text-sm font-medium text-primary-text/85
+              transition-colors duration-150 hover:bg-white/10 hover:text-white
+              ${item.className ?? ""}`}
           />
         ))}
       </div>

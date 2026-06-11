@@ -1,4 +1,4 @@
-
+"use client";
 import VideoCard from "@/components/ui/VideoCard";
 import { Video } from "@/types/components/ui/videoCard.types";
 
@@ -15,6 +15,7 @@ export function RelatedVideos({ videos }: { videos: Video[] }) {
           views={video.views || "0"}
           postedTime={new Date(video.created_at).toLocaleDateString()}
           variant="compact"
+          isMenuOpen={false}
         />
       ))}
     </div>

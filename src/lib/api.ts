@@ -37,17 +37,30 @@ export const getVideo = async (id: string) => {
   return res.json();
 };
 
-export const uploadVideo = (formData: FormData, onProgress: (percent: number) => void) =>{
-  return axios.post(`${BASE_URL}/videos/upload`, formData, {
-    withCredentials: true,
-    onUploadProgress: (progressEvent) => {
-      if (progressEvent.total) {
-        const percent = Math.round((progressEvent.loaded / progressEvent.total) * 100);
-        onProgress(percent);
-      }
-    },
-  }).then(res => res.data)
-}
+export const getUserVideos = async () => {
+  return axios
+    .get(`${BASE_URL}/videos/mine`, { withCredentials: true })
+    .then((res) => res.data);
+};
+
+export const uploadVideo = (
+  formData: FormData,
+  onProgress: (percent: number) => void,
+) => {
+  return axios
+    .post(`${BASE_URL}/videos/upload`, formData, {
+      withCredentials: true,
+      onUploadProgress: (progressEvent) => {
+        if (progressEvent.total) {
+          const percent = Math.round(
+            (progressEvent.loaded / progressEvent.total) * 100,
+          );
+          onProgress(percent);
+        }
+      },
+    })
+    .then((res) => res.data);
+};
 
 export const sendViews = async (videoId: string) => {
   const res = await fetch(`${BASE_URL}/videos/${videoId}/view`, {

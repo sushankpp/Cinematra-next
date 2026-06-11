@@ -4,6 +4,10 @@ import Image from "./Image";
 import Link from "./Link";
 import { VideoCardProps } from "@/types/components/ui/videoCard.types";
 import { formatCommentTime } from "@/lib/formatCommentTime";
+import Button from "./Button";
+import { MoreVertical } from "lucide-react";
+import OptionsDropdown from "./OptionsDropdown";
+
 export default function VideoCard({
   creatorName,
   videoTitle,
@@ -13,7 +17,9 @@ export default function VideoCard({
   videoThumbnail,
   videoId,
   className,
-  variant = "default", // ← default stays as is
+  variant = "default",
+  isMenuOpen,
+  onMenuToggle,
   ...props
 }: VideoCardProps) {
   const isCompact = variant === "compact";
@@ -89,6 +95,21 @@ export default function VideoCard({
             <span>{formatCommentTime(postedTime)}</span>
           </div>
         </div>
+      </div>
+      <div className="absolute right-0 bottom-20 z-11">
+        <Button
+          icon={<MoreVertical color="white" />}
+          variant="none"
+          className="p-2 rounded-full hover:bg-[#2a2a2a]"
+          onClick={onMenuToggle}
+        />
+        <OptionsDropdown
+          isOpen={isMenuOpen}
+          items={[
+            { label: "Edit", onClick: () => {} },
+            { label: "Delete", onClick: () => {} },
+          ]}
+        />
       </div>
 
       <Link

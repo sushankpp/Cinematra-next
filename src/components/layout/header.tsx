@@ -35,7 +35,7 @@ export default function Header() {
           <div className="flex gap-3">
             {isAuthenticated && (
               <Link
-                href="/dashboard"
+                href="/dashboard/upload"
                 className="rounded-full px-4 py-2 flex items-center text-sm font-medium text-red-text bg-white/10 backdrop-blur-md border border-white/20 shadow-lg shadow-white/10 hover:bg-white/20 hover:border-white/30 hover:shadow-white/20 transition-all duration-300 supports-[backdrop-filter]:bg-white/10"
               >
                 <PlusIcon className="w-4 h-4 mr-1" />

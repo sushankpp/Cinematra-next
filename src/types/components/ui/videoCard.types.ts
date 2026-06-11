@@ -7,6 +7,8 @@ export interface VideoCardProps extends React.HTMLAttributes<HTMLDivElement> {
   videoThumbnail: string;
   videoId: string;
   className?: string;
+  onMenuToggle?: () => void;
+  isMenuOpen: boolean;
   variant? : "default" | "compact";
 }
 

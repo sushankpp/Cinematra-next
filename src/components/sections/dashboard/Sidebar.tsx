@@ -1,10 +1,11 @@
 "use client";
-import { LayoutDashboard, Video, Users, Bell } from "lucide-react";
+import { LayoutDashboard, Video, Users, Bell, Upload } from "lucide-react";
 import { SidebarItem } from "./SidebarItem";
 
 const sidebarItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/videos", label: "Videos", icon: Video },
+  { href: "/dashboard/upload", label: "Upload", icon: Upload },
   { href: "/dashboard/users", label: "Users", icon: Users },
   { href: "/dashboard/notifications", label: "Notifications", icon: Bell },
 ];
