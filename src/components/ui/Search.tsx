@@ -19,7 +19,7 @@ export default function Search() {
   };
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center justify-center">
       <div
         className={cn(
           "overflow-hidden transition-all duration-300 ease-in-out",
@@ -32,12 +32,12 @@ export default function Search() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className={cn(
-            "focus:outline-none focus:ring-0  h-[40px] border-charcoal-500 text-white",
+            "focus:outline-none focus:ring-0  h-[38px] border-charcoal-500 text-white",
           )}
         />
       </div>
       <Button
-        variant="tertiary"
+        variant="secondary"
         icon={<SearchIcon size={20} className="text-brand-50 hover:text-white" />}
         onClick={() => {
           handleSearchOpen();

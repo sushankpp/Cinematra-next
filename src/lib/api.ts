@@ -1,4 +1,5 @@
 import { ApiResponse } from "../types/lib/api.types";
+import { WatchHistoryitem } from "@/types/components/ui/videoCard.types";
 import axios from "axios";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
@@ -173,13 +174,16 @@ export const postUserPreferences = async (userPreferences: any) => {
     .then((res) => res.data);
 };
 
-export const watchHistory = async (videoId: string, data: { watch_duration_seconds: number, completed: boolean }) => {
+export const watchHistory = async (
+  videoId: string,
+  data: { watch_duration_seconds: number; completed: boolean, video_duration_seconds?: number },
+) => {
   return axios
-    .post(`${BASE_URL}/watch/${videoId}`, {data}, { withCredentials: true })
+    .post(`${BASE_URL}/watch/${videoId}`, data, { withCredentials: true })
     .then((res) => res.data);
 };
 
-export const getWatchHistory = async () => {
+export const getWatchHistory = async ():Promise<WatchHistoryitem[]> => {
   return axios
     .get(`${BASE_URL}/watch/history`, { withCredentials: true })
     .then((res) => res.data);

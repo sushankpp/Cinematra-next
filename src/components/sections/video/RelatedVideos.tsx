@@ -5,16 +5,20 @@ import { Video } from "@/types/components/ui/videoCard.types";
 export function RelatedVideos({ videos }: { videos: Video[] }) {
   return (
     <div className="flex flex-col gap-3 mt-8">
-      {videos.map((video) => (
+      {videos.map((video, _) => (
         <VideoCard
           key={video.id}
+          creatorProfile={video.users?.picture ?? ""}
           videoId={video.id}
-          videoThumbnail={video.thumbnail_url}
           videoTitle={video.title}
-          creatorName={`${video.users.first_name} ${video.users.last_name}`}
-          views={video.views || "0"}
+          videoThumbnail={video.thumbnail_url}
           postedTime={new Date(video.created_at).toLocaleDateString()}
-          variant="compact"
+          creatorName={
+            video.users
+              ? `${video.users.first_name} ${video.users.last_name}`
+              : "Unknown"
+          }
+          views={`${video.views}`}
           isMenuOpen={false}
         />
       ))}

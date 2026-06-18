@@ -60,13 +60,15 @@ export function VideoPlayer({
             watchHistory(videoId, {
               watch_duration_seconds: Math.floor(videoControls.currentTime),
               completed: false,
+              video_duration_seconds: Math.floor(videoControls.duration),
             })
           }
           onEnded={() => {
             videoControls.setIsPlaying(false);
             watchHistory(videoId, {
-              watch_duration_seconds: Math.floor(videoControls.currentTime),
+              watch_duration_seconds: Math.floor(videoControls.duration),
               completed: true,
+              video_duration_seconds: Math.floor(videoControls.duration),
             });
           }}
         />

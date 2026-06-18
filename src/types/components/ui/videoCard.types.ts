@@ -57,3 +57,28 @@ export interface GenreFormDB {
   name: string;
   slug: string;
 }
+
+export interface TagFromDB {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+
+export interface WatchHistoryitem {
+  id: string;
+  user_id: string;
+  video_id: string;
+  watch_duration_seconds: number;
+  video_duration_seconds: number;
+  completed: boolean;
+  watched_at: string;
+  videos: {
+    id: string;
+    title: string;
+    thumbnail_url: string;
+    storage_url: string;
+    language: string;
+    content_rating: string;
+  };
+}

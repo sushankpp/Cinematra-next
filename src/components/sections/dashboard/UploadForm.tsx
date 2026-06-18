@@ -5,10 +5,10 @@ import { Field } from "./Field";
 import { useUploadVideo } from "@/hooks/useUploadVideo";
 import { UploadStage } from "./UploadStage";
 
-export function UploadVideoSection({editId }: {editId? : string | null}) {
+export function UploadVideoSection({ editId }: { editId?: string | null }) {
   const {
     availableGenres,
-    isLoadingGenres,
+    availableTags,
     scalarData,
     files,
     tags,
@@ -19,8 +19,6 @@ export function UploadVideoSection({editId }: {editId? : string | null}) {
     genres,
     existingThumbnail,
     existingVideo,
-    setUploadInsights,
-    setUploadStage,
     setFiles,
     setScalarData,
     setTags,
@@ -103,7 +101,7 @@ export function UploadVideoSection({editId }: {editId? : string | null}) {
             }}
           >
             <option value="" disabled>
-              Add a genre
+              Select a genre
             </option>
             {availableGenres
               .filter((g) => !genres.includes(String(g.id)))
@@ -195,24 +193,51 @@ export function UploadVideoSection({editId }: {editId? : string | null}) {
 
         {/* Tags */}
         <Field label="Tags">
-          <div className="flex gap-2">
-            <input
-              name="tag"
-              type="text"
-              value={tags.join(", ")}
-              placeholder="Type tag name..."
-              className="input-base flex-1"
-              onChange={(e) =>
-                setTags(e.target.value.split(",").map((tag) => tag.trim()))
+          <select
+            className="input-base mt-2"
+            value=""
+            onChange={(e) => {
+              const id = e.target.value;
+              if (id && !tags.includes(id)) {
+                setTags((prev) => [...prev, id]);
               }
-            />
-            <button
-              type="button"
-              className="w-9 h-9 flex-shrink-0 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-tertiary-Shade hover:text-primary-active hover:border-primary-active/30 transition-colors"
-            >
-              <span className="text-lg leading-none">+</span>
-            </button>
-          </div>
+            }}
+          >
+            <option value="" disabled>
+              Select a tag...
+            </option>
+            {availableTags
+              .filter((t) => !tags.includes(String(t.id)))
+              .map((tag) => (
+                <option key={tag.id} value={tag.id}>
+                  {tag.name}
+                </option>
+              ))}
+          </select>
+
+          {tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-2">
+              {tags.map((id) => {
+                const tag = availableTags.find((t) => String(t.id) === id);
+                return (
+                  <span
+                    key={id}
+                    className="flex items-center gap-1 px-2 py-1 rounded-md bg-primary-active/20 border border-primary-active/30 text-primary-text text-xs"
+                  >
+                    {tag?.name}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setTags((prev) => prev.filter((t) => t !== id))
+                      }
+                    >
+                      ×
+                    </button>
+                  </span>
+                );
+              })}
+            </div>
+          )}
         </Field>
 
         <UploadStage

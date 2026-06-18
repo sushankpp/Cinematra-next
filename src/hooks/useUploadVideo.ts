@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { GenreFormDB } from "@/types/components/ui/videoCard.types";
+import { GenreFormDB, TagFromDB } from "@/types/components/ui/videoCard.types";
 import { supabase } from "@/lib/supabase";
 import { uploadVideo, getVideo, updateVideo } from "@/lib/api";
 import { toast } from "sonner";
@@ -7,14 +7,19 @@ import { useRouter } from "next/navigation";
 
 export function useUploadVideo(editId?: string | null) {
   const [availableGenres, setAvailableGenres] = useState<GenreFormDB[]>([]);
+  const [availableTags, setAvailableTags] = useState<TagFromDB[]>([]);
   const [isLoadingGenres, setIsLoadingGenres] = useState<boolean>(true);
-  const [existingThumbnail, setExistingThumbnail] = useState<string | null>(null);
+  const [existingThumbnail, setExistingThumbnail] = useState<string | null>(
+    null,
+  );
   const [existingVideo, setExistingVideo] = useState<string | null>(null);
   const [tags, setTags] = useState<string[]>([]);
   const [genres, setGenres] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploadStage, setUploadStage] = useState<"idle" | "uploading" | "processing" | "done">("idle");
+  const [uploadStage, setUploadStage] = useState<
+    "idle" | "uploading" | "processing" | "done"
+  >("idle");
   const uploadStartTime = useRef<number>(0);
   const processingStartTime = useRef<number>(0);
   const router = useRouter();
@@ -62,6 +67,22 @@ export function useUploadVideo(editId?: string | null) {
       }
     }
     fetchGenres();
+  }, []);
+
+  useEffect(() => {
+    async function fetchTags() {
+      try {
+        const { data, error } = await supabase
+          .from("tags")
+          .select("*")
+          .order("name", { ascending: true });
+        if (error) throw error;
+        if (data) setAvailableTags(data);
+      } catch (err) {
+        console.error("Error fetching tags:", err);
+      }
+    }
+    fetchTags();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -186,6 +207,7 @@ export function useUploadVideo(editId?: string | null) {
 
   return {
     availableGenres,
+    availableTags,
     isLoadingGenres,
     scalarData,
     files,

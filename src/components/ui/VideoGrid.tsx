@@ -4,7 +4,7 @@ import Container from "./Container";
 import VideoCard from "./VideoCard";
 import { useState } from "react";
 
-export function VideoGrid({ videos , items, getItems }: VideoGridProps) {
+export function VideoGrid({ videos, items, getItems }: VideoGridProps) {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   return (
     <section className="mb-4 pt-8 pb-8">
@@ -13,15 +13,21 @@ export function VideoGrid({ videos , items, getItems }: VideoGridProps) {
           {videos.map((video, _) => (
             <VideoCard
               key={video.id}
-              creatorProfile={video.users.picture || ""}
+              creatorProfile={video.users?.picture ?? ""}
               videoId={video.id}
               videoTitle={video.title}
               videoThumbnail={video.thumbnail_url}
               postedTime={new Date(video.created_at).toLocaleDateString()}
-              creatorName={`${video.users.first_name} ${video.users.last_name}`}
+              creatorName={
+                video.users
+                  ? `${video.users.first_name} ${video.users.last_name}`
+                  : "Unknown"
+              }
               views={`${video.views}`}
               isMenuOpen={openMenuId === video.id}
-              onMenuToggle={() => setOpenMenuId(openMenuId === video.id ? null : video.id)}
+              onMenuToggle={() =>
+                setOpenMenuId(openMenuId === video.id ? null : video.id)
+              }
               items={getItems ? getItems(video) : items}
             />
           ))}
