@@ -1,10 +1,10 @@
 "use client";
-import { Video } from "@/types/components/ui/videoCard.types";
+import { VideoGridProps } from "@/types/components/ui/videoCard.types";
 import Container from "./Container";
 import VideoCard from "./VideoCard";
 import { useState } from "react";
 
-export function VideoGrid({ videos }: { videos: Video[] }) {
+export function VideoGrid({ videos , items, getItems }: VideoGridProps) {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   return (
     <section className="mb-4 pt-8 pb-8">
@@ -22,6 +22,7 @@ export function VideoGrid({ videos }: { videos: Video[] }) {
               views={`${video.views}`}
               isMenuOpen={openMenuId === video.id}
               onMenuToggle={() => setOpenMenuId(openMenuId === video.id ? null : video.id)}
+              items={getItems ? getItems(video) : items}
             />
           ))}
         </div>

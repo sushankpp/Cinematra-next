@@ -20,6 +20,7 @@ export default function OptionsDropdown({
             ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
             : "opacity-0 -translate-y-1 scale-95 pointer-events-none"
         }`}
+      onClick={(e) => e.stopPropagation()}
       {...props}
     >
       {(src || name) && (
@@ -45,17 +46,32 @@ export default function OptionsDropdown({
       )}
 
       <div className="flex flex-col p-1.5">
-        {items.map((item, i) => (
-          <NavItem
-            key={i}
-            href={item.href ?? ""}
-            label={item.label}
-            onClick={item.onClick}
-            className={`rounded px-3 py-2 text-sm font-medium text-primary-text/85
-              transition-colors duration-150 hover:bg-white/10 hover:text-white
-              ${item.className ?? ""}`}
-          />
-        ))}
+        {items.map((item, i) =>
+          item.href ? (
+            <NavItem
+              key={i}
+              href={item.href}
+              label={item.label}
+              onClick={item.onClick}
+              className={`rounded px-3 py-2 text-sm font-medium text-primary-text/85
+          transition-colors duration-150 hover:bg-white/10 hover:text-white
+          ${item.className ?? ""}`}
+            />
+          ) : (
+            <button
+              key={i}
+              onClick={(e) => {
+                e.stopPropagation();
+                item.onClick?.();
+              }}
+              className={`rounded px-3 py-2 text-sm font-medium text-primary-text/85 text-left
+          transition-colors duration-150 hover:bg-white/10 hover:text-white
+          ${item.className ?? ""}`}
+            >
+              {item.label}
+            </button>
+          ),
+        )}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { Field } from "./Field";
 import { useUploadVideo } from "@/hooks/useUploadVideo";
 import { UploadStage } from "./UploadStage";
 
-export function UploadVideoSection() {
+export function UploadVideoSection({editId }: {editId? : string | null}) {
   const {
     availableGenres,
     isLoadingGenres,
@@ -17,6 +17,8 @@ export function UploadVideoSection() {
     uploadStage,
     uploadInsights,
     genres,
+    existingThumbnail,
+    existingVideo,
     setUploadInsights,
     setUploadStage,
     setFiles,
@@ -25,7 +27,7 @@ export function UploadVideoSection() {
     setGenres,
     handleSubmit,
     onReset,
-  } = useUploadVideo();
+  } = useUploadVideo(editId);
 
   return (
     <form
@@ -46,6 +48,8 @@ export function UploadVideoSection() {
           }
           videoFile={files.videoFile}
           thumbnail={files.thumbnail}
+          existingThumbnail={existingThumbnail}
+          existingVideo={existingVideo}
         />
       </div>
 

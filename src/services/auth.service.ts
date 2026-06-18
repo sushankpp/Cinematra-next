@@ -5,7 +5,6 @@ import {
   MeResponse,
 } from "@/types/service/authResponse.types";
 import { apiCall } from "@/lib/api";
-import { User } from "@/types/context/authContext.types";
 
 export const authService = {
   register: (payload: RegisterPayload) =>
@@ -23,6 +22,7 @@ export const authService = {
   me: () =>
     apiCall<MeResponse>("/auth/me", {
       method: "GET",
+      credentials: "include",
     }),
   
   logout: () =>{

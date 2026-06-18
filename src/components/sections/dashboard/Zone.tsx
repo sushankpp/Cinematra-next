@@ -9,6 +9,7 @@ interface DropZoneProps {
   isCompact?: boolean;
   onFileSelect: (file: File | null) => void;
   file?: File | null;
+  existingPreview?: string | null;
 }
 
 export function Zone({
@@ -19,16 +20,20 @@ export function Zone({
   isCompact,
   onFileSelect,
   file,
+  existingPreview,
 }: DropZoneProps) {
   const localInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!file) return;
+    if (!file) {
+      setPreviewUrl(existingPreview || null);
+      return;
+    }
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
     return () => URL.revokeObjectURL(url);
-  }, [file]);
+  }, [file, existingPreview]);
 
   return (
     <div>
@@ -40,17 +45,28 @@ export function Zone({
               alt="Thumbnail preview"
               className="w-full h-full object-cover rounded-xl"
             />
-          ) : (
+          ) : file ? (
             <video
               src={previewUrl}
               className="w-full rounded-xl"
               muted
               playsInline
             />
+          ) : (
+            <div className="w-full h-[160px] rounded-xl bg-white/5 border border-white/10 flex flex-col items-center justify-center gap-2">
+              <span className="text-3xl">🎬</span>
+              <p className="text-sm text-primary-text/70">
+                Current video uploaded
+              </p>
+              <p className="text-xs text-primary-text/40">
+                Select a new file to replace it
+              </p>
+            </div>
           )}
           <div className="flex items-center justify-between px-3 py-2 mt-2 rounded-lg bg-white/5 border border-white/10">
             <span className="text-xs text-primary-text/70 truncate">
-              {file?.name}
+              {file?.name ??
+                (existingPreview ? "Current file" : "No file selected")}
             </span>
             <button
               type="button"

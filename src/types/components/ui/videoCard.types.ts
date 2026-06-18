@@ -1,3 +1,16 @@
+export type DropdownItem = {
+  label: string;
+  href?: string;
+  className?: string;
+  onClick?: () => void;
+};
+
+export type VideoGridProps = {
+  videos: Video[];
+  items?: DropdownItem[];
+  getItems?: (video: Video) => DropdownItem[];
+};
+
 export interface VideoCardProps extends React.HTMLAttributes<HTMLDivElement> {
   creatorProfile?: string;
   videoTitle: string;
@@ -9,7 +22,8 @@ export interface VideoCardProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   onMenuToggle?: () => void;
   isMenuOpen: boolean;
-  variant? : "default" | "compact";
+  items?: DropdownItem[];
+  variant?: "default" | "compact";
 }
 
 export interface Video {
@@ -22,7 +36,7 @@ export interface Video {
     first_name: string;
     last_name: string;
     picture?: string;
-  }
+  };
   views: string;
 }
 

@@ -2,7 +2,7 @@ import { RelatedVideos } from "@/components/sections/video/RelatedVideos";
 import { VideoInfo } from "@/components/sections/video/VideoInfo";
 import { VideoPlayer } from "@/components/sections/video/VideoPlayer";
 import Container from "@/components/ui/Container";
-import { getVideo, getVideos, getSubscriptionCount } from "@/lib/api";
+import { getVideo, getVideos } from "@/lib/api";
 
 export default async function VideoPage({
   params,

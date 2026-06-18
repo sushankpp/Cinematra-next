@@ -20,6 +20,7 @@ export default function VideoCard({
   variant = "default",
   isMenuOpen,
   onMenuToggle,
+  items,
   ...props
 }: VideoCardProps) {
   const isCompact = variant === "compact";
@@ -96,7 +97,7 @@ export default function VideoCard({
           </div>
         </div>
       </div>
-      <div className="absolute right-0 bottom-20 z-11">
+      <div className="absolute right-0 bottom-13 z-11">
         <Button
           icon={<MoreVertical color="white" />}
           variant="none"
@@ -105,10 +106,7 @@ export default function VideoCard({
         />
         <OptionsDropdown
           isOpen={isMenuOpen}
-          items={[
-            { label: "Edit", onClick: () => {} },
-            { label: "Delete", onClick: () => {} },
-          ]}
+          items={items ?? []}
         />
       </div>
 

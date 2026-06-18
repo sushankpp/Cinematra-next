@@ -5,9 +5,13 @@ export interface UploadDropZoneProps {
   onThumbnailSelect: (file: File | null) => void;
   videoFile?: File | null;
   thumbnail?: File | null;
+  existingThumbnail?: string | null;
+  existingVideo?: string | null;
 }
 
-export function UploadDropZone({ onVideoSelect, onThumbnailSelect, videoFile, thumbnail }: UploadDropZoneProps) {
+export function UploadDropZone({ onVideoSelect, onThumbnailSelect, videoFile, thumbnail, existingThumbnail, existingVideo }: UploadDropZoneProps) {
+  const thumbnailPreview = thumbnail ? URL.createObjectURL(thumbnail) : existingThumbnail || null;
+  const videoPreview = videoFile ? URL.createObjectURL(videoFile) : existingVideo || null;
   return (
     <div className="flex flex-col gap-6">
       <Zone
@@ -17,6 +21,7 @@ export function UploadDropZone({ onVideoSelect, onThumbnailSelect, videoFile, th
         maxSize="10GB"
         onFileSelect={onVideoSelect}
         file={videoFile}
+        existingPreview={videoPreview}
       />
       <Zone
         type="image"
@@ -26,6 +31,7 @@ export function UploadDropZone({ onVideoSelect, onThumbnailSelect, videoFile, th
         isCompact
         onFileSelect={onThumbnailSelect}
         file={thumbnail}
+        existingPreview={thumbnailPreview}
       />
     </div>
   );

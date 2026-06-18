@@ -3,7 +3,7 @@ import { VideoPlayerProps } from "@/types/components/sections/video/videoPlayer.
 import { useRef } from "react";
 import { useVideoPlayer } from "@/hooks/useVideoPlayer";
 import { VideoControls } from "./VideoControls";
-import { sendViews } from "@/lib/api";
+import { sendViews, watchHistory } from "@/lib/api";
 
 export function VideoPlayer({
   src,
@@ -15,15 +15,17 @@ export function VideoPlayer({
   const videoControls = useVideoPlayer(src);
   const viewSent = useRef(false);
 
-  const handleFirstPlay = () =>{
+  const handleFirstPlay = () => {
     if (!viewSent.current) {
       viewSent.current = true;
       console.log("Sending view for video:", videoId);
-      sendViews(videoId).then((res)=>{
-        console.log("View sent successfully for video:", videoId);
-      }).catch(()=>{
-        viewSent.current = false; //ignore if failed
-      })
+      sendViews(videoId)
+        .then((res) => {
+          console.log("View sent successfully for video:", videoId);
+        })
+        .catch(() => {
+          viewSent.current = false;
+        });
     }
   };
 
@@ -54,7 +56,19 @@ export function VideoPlayer({
             )
           }
           onPlay={handleFirstPlay}
-          onEnded={() => videoControls.setIsPlaying(false)}
+          onPause={() =>
+            watchHistory(videoId, {
+              watch_duration_seconds: Math.floor(videoControls.currentTime),
+              completed: false,
+            })
+          }
+          onEnded={() => {
+            videoControls.setIsPlaying(false);
+            watchHistory(videoId, {
+              watch_duration_seconds: Math.floor(videoControls.currentTime),
+              completed: true,
+            });
+          }}
         />
 
         <VideoControls {...videoControls} />

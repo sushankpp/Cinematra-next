@@ -4,6 +4,10 @@ import { VideoGrid } from "@/components/ui/VideoGrid";
 import { getVideos } from "@/lib/api";
 import { Suspense } from "react";
 
+export const items = [
+  { label: "Share" },
+]
+
 export default function Home() {
   return (
     <>
@@ -17,5 +21,6 @@ export default function Home() {
 
 async function VideoGridFetcher() {
   const videos = await getVideos();
-  return <VideoGrid videos={videos} />;
+  console.log("Fetched videos:", videos);
+  return <VideoGrid videos={videos} items={items} />;
 }

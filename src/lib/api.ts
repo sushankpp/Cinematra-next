@@ -26,7 +26,9 @@ export async function apiCall<T>(
 }
 
 export const getVideos = async () => {
-  const res = await fetch(`${BASE_URL}/videos`);
+  const res = await fetch(`${BASE_URL}/videos`, {
+    next: { revalidate: 60 },
+  });
   if (!res.ok) throw new Error("Failed to fetch videos");
   return res.json();
 };
@@ -40,6 +42,20 @@ export const getVideo = async (id: string) => {
 export const getUserVideos = async () => {
   return axios
     .get(`${BASE_URL}/videos/mine`, { withCredentials: true })
+    .then((res) => res.data);
+};
+
+export const deleteVideo = async (id: string) => {
+  return axios
+    .delete(`${BASE_URL}/videos/${id}`, { withCredentials: true })
+    .then((res) => res.data);
+};
+
+export const updateVideo = async (id: string, formData: FormData) => {
+  return axios
+    .put(`${BASE_URL}/videos/${id}`, formData, {
+      withCredentials: true,
+    })
     .then((res) => res.data);
 };
 
@@ -123,7 +139,7 @@ export const unsubscribe = async (channelId: string) => {
   return res.json();
 };
 
-export const getSubscriptions = async (channelId: string) => {
+export const getSubscriptions = async (channelId?: string) => {
   const res = await fetch(`${BASE_URL}/subscriptions/${channelId}`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
@@ -143,4 +159,28 @@ export const getSubscriptionCount = async (channelId: string) => {
   if (!res.ok) throw new Error("Failed to fetch subscription count");
   const json = await res.json();
   return Number(json.subscriber_count);
+};
+
+export const getUserPreferences = async () => {
+  return axios
+    .get(`${BASE_URL}/preferences`, { withCredentials: true })
+    .then((res) => res.data);
+};
+
+export const postUserPreferences = async (userPreferences: any) => {
+  return axios
+    .post(`${BASE_URL}/preferences`, userPreferences, { withCredentials: true })
+    .then((res) => res.data);
+};
+
+export const watchHistory = async (videoId: string, data: { watch_duration_seconds: number, completed: boolean }) => {
+  return axios
+    .post(`${BASE_URL}/watch/${videoId}`, {data}, { withCredentials: true })
+    .then((res) => res.data);
+};
+
+export const getWatchHistory = async () => {
+  return axios
+    .get(`${BASE_URL}/watch/history`, { withCredentials: true })
+    .then((res) => res.data);
 };

@@ -2,11 +2,11 @@ import { cn } from "@/lib/util";
 import { ButtonProps } from "@/types/components/ui/button.types";
 
 const variantClasses = {
-  primary: "bg-red-500 text-white hover:bg-red-600",
-  secondary: "bg-charcoal-500 text-white hover:bg-charcoal-800",
-  tertiary: "bg-transparent text-white border border-red-500 hover:bg-red-500",
-  ghost: "bg-transparent text-black hover:bg-charcoal-100 border border-charcoal-500 border-2 rounded-full p-2",
-  none: "bg-transparent text-white hover:bg-transparent border-none",
+  primary: "bg-red-500 text-white hover:bg-red-600 rounded-lg",
+  secondary: "bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm rounded-lg",
+  tertiary: "bg-transparent text-red-400 border border-red-500/50 hover:border-red-500 hover:text-red-300 rounded-lg",
+  ghost: "bg-transparent text-white/70 hover:text-white hover:bg-white/8 rounded-full rounded-lg",
+  none: "bg-transparent text-white/50 hover:text-white rounded-lg",
 };
 
 export default function Button({
@@ -21,7 +21,7 @@ export default function Button({
   return (
     <button
       className={cn(
-        "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors duration-300 cursor-pointer",
+        "flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium transition-colors duration-300 cursor-pointer",
         variantClasses[variant],
         className,
       )}
