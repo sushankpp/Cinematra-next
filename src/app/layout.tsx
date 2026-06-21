@@ -7,8 +7,9 @@ import Footer from "@/components/layout/Footer";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "sonner";
 import { cn } from "@/lib/util";
+import { OnboardingGate } from "@/components/onboarding/OnboardingGate";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +38,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
+      className={cn(
+        "h-full",
+        "antialiased",
+        geistSans.variable,
+        geistMono.variable,
+        "font-sans",
+        inter.variable,
+      )}
     >
       <body className="min-h-full flex flex-col bg-secondary-Body">
         <NextTopLoader color="#e50914" height={3} showSpinner={false} />
@@ -45,7 +53,8 @@ export default function RootLayout({
           <Header />
 
           <main>
-          {children}
+            <OnboardingGate />
+            {children}
           </main>
           <Toaster position="top-right" richColors />
           <Footer />

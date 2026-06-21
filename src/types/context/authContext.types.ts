@@ -8,6 +8,7 @@ export type User = {
     provider: string | null;
     created_at: string;
     updated_at: string;
+    onboarding_completed: boolean;
 }
 
 export type AuthContextType = {
@@ -16,4 +17,5 @@ export type AuthContextType = {
     isAuthenticated: boolean;
     logout: () => void;
     refreshUser: () => void;
+
 }

@@ -3,6 +3,7 @@ import { VideoGridProps } from "@/types/components/ui/videoCard.types";
 import Container from "./Container";
 import VideoCard from "./VideoCard";
 import { useState } from "react";
+import { formatCommentTime } from "@/lib/formatCommentTime";
 
 export function VideoGrid({ videos, items, getItems }: VideoGridProps) {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
@@ -17,7 +18,7 @@ export function VideoGrid({ videos, items, getItems }: VideoGridProps) {
               videoId={video.id}
               videoTitle={video.title}
               videoThumbnail={video.thumbnail_url}
-              postedTime={new Date(video.created_at).toLocaleDateString()}
+              postedTime={formatCommentTime(video.created_at)}
               creatorName={
                 video.users
                   ? `${video.users.first_name} ${video.users.last_name}`

@@ -43,6 +43,7 @@ export default function UserProfile({ user }: { user: User }) {
         isOpen={isDropdownOpen}
         items={[
           { label: "Profile", href: `/profile/${user.id}` },
+          { label: "Watch History", href: `/history` },
           { label: "Logout", onClick: logout, className: "text-red-text" },
         ]}
       />

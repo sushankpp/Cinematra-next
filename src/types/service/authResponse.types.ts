@@ -28,4 +28,5 @@ export type LoginPayload = {
 
 export type MeResponse = {
   user : User;
+  onboarding_completed: boolean;
 }

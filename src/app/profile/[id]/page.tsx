@@ -18,6 +18,7 @@ export default function ProfilePage() {
       if (!data?.user) return;
       const u = data.user;
       setUser(u);
+      console.log(data);
       setFormData({
         picture:     u.picture    || "",
         first_name:  u.first_name || "",

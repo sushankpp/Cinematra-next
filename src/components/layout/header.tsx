@@ -13,6 +13,7 @@ import { PlusIcon } from "lucide-react";
 
 export default function Header() {
   const { user, isAuthenticated } = useAuth();
+  console.log(user);
   return (
     <header className="sticky top-0 z-50 bg-secondary-Body/80 backdrop-blur-md border-b border-[rgba(255,255,255,0.05)]">
       <Container>

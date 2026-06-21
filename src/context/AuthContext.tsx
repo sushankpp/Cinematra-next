@@ -15,7 +15,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (error || !data) {
       setUser(null);
     } else {
-      setUser(data.user);
+      setUser({...data.user, onboarding_completed: data.onboarding_completed});
     }
     setIsLoading(false);
   };

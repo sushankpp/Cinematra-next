@@ -28,7 +28,7 @@ export async function apiCall<T>(
 
 export const getVideos = async () => {
   const res = await fetch(`${BASE_URL}/videos`, {
-    next: { revalidate: 60 },
+    cache: "no-store",
   });
   if (!res.ok) throw new Error("Failed to fetch videos");
   return res.json();
