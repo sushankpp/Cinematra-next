@@ -5,7 +5,7 @@ import VideoCard from "./VideoCard";
 import { useState } from "react";
 import { formatCommentTime } from "@/lib/formatCommentTime";
 
-export function VideoGrid({ videos, items, getItems }: VideoGridProps) {
+export function VideoGrid({ videos = [], items, getItems }: VideoGridProps) {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   return (
     <section className="mb-4 pt-8 pb-8">
@@ -30,6 +30,7 @@ export function VideoGrid({ videos, items, getItems }: VideoGridProps) {
                 setOpenMenuId(openMenuId === video.id ? null : video.id)
               }
               items={getItems ? getItems(video) : items}
+              similarityScore={video.similarity_score}
             />
           ))}
         </div>

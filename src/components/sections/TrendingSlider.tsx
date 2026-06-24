@@ -1,32 +1,21 @@
 "use client";
 import useEmblaCarousel from "embla-carousel-react";
-import { ArrowRightCircle } from "lucide-react";
+import Autoplay from "embla-carousel-autoplay";
 import Container from "../ui/Container";
-import { Heading } from "../ui/Heading";
-import Link from "../ui/Link";
-import { TrendingCard } from "./TrendingCard";
-import { useEffect, useState } from "react";
-import TrendingControls from "./TrendingControls";
+import { useCallback, useEffect, useState } from "react";
 import TrendingPagination from "./TrendingPagination";
+import { TrendingHeroSlide } from "./TrendingHeroSlide";
+import { Video } from "@/types/components/ui/videoCard.types";
 
-const trendingVideos = [
-  {
-    title: "Movie Title goes here",
-    duration: "3:04",
-    likes: 3200,
-    comment: 150,
-    videoSrc: "/video/1",
-    videoPoster: "/login-image.jpg",
-    creatorName: "John Doe",
-    creatorProfile: "/profile.jpg"
-  }
-]
-
-export function TrendingSlider() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: false,
-    align: "start",
-  });
+export function TrendingSlider({ videos }: { videos: Video[] }) {
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+      align: "start",
+      skipSnaps: false,
+    },
+    [Autoplay({ delay: 6000, stopOnInteraction: true })],
+  );
   const [activeIndex, setActiveIndex] = useState(0);
   const [slideCount, setSlideCount] = useState(0);
 
@@ -35,56 +24,64 @@ export function TrendingSlider() {
 
     setSlideCount(emblaApi.scrollSnapList().length);
 
-    emblaApi.on("select", () => {
+    const onSelect = () => {
       setActiveIndex(emblaApi.selectedScrollSnap());
-    });
+    };
+
+    emblaApi.on("select", onSelect);
+    onSelect();
+
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
   }, [emblaApi]);
 
-  const scrollPrev = () => emblaApi?.scrollPrev();
-  const scrollNext = () => emblaApi?.scrollNext();
+  const scrollTo = useCallback(
+    (index: number) => {
+      emblaApi?.scrollTo(index);
+    },
+    [emblaApi],
+  );
 
   return (
-    <div className="mb-6 mt-6 border-b border-tertiary-Shade pb-6">
-      <Container>
-        <div className="flex justify-between items-center mb-6">
-          <Heading
-            text="Trending Now"
-            className="font-headline text-primary-text text-[48px] font-bold"
-          />
-          <Link
-            href="trending"
-            className="text-charcoal-800 flex gap-1 items-center hover:underline transition-all duration-300 ease-in-out group hover:text-gold-500"
-          >
-            View all
-            <ArrowRightCircle
-              size={16}
-              className="group-hover:translate-x-1 transition-transform duration-300"
-            />
-          </Link>
-        </div>
-        <div className="relative">
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex gap-4">
-              <div className="lg:flex-[0_0_calc(50%-8px)] flex-[0_0_100%]">
-                {
-                  trendingVideos.map((video, index) => (
-                    <TrendingCard key={index} {...video} />
-                  ))
+    <div className="relative w-full h-[100vh] -mt-[73px] overflow-hidden">
+      {/* Main full-screen carousel */}
+      <div className="h-full" ref={emblaRef}>
+        <div className="flex h-full">
+          {videos.map((video, index) => (
+            <div
+              key={index}
+              className="flex-[0_0_100%] min-w-0 h-full relative"
+            >
+              <TrendingHeroSlide
+                title={video.title}
+                storage_url={`/video/${video.id}`}
+                thumbnail_url={video.thumbnail_url}
+                creatorName={
+                  video.users.first_name + " " + video.users.last_name
                 }
-              </div>
+                creatorProfile={video.users.picture}
+                views={video.views}
+                isActive={index === activeIndex}
+              />
             </div>
-          </div>
+          ))}
+        </div>
+      </div>
 
-          <div className="flex justify-between items-center mt-4">
+      <div className="absolute bottom-0 left-0 right-0 z-20">
+        <div className="absolute inset-0 bg-gradient-to-t from-secondary-Body via-secondary-Body/80 to-transparent pointer-events-none" />
+
+        <Container className="relative z-10 pb-6">
+          <div className="flex justify-center mb-5">
             <TrendingPagination
               count={slideCount}
               activeIndex={activeIndex}
-              onDotClick={(index) => emblaApi?.scrollTo(index)}
+              onDotClick={scrollTo}
             />
-            <TrendingControls onPrev={scrollPrev} onNext={scrollNext} />
           </div>
-        </div>
-      </Container>
+        </Container>
+      </div>
     </div>
   );
 }

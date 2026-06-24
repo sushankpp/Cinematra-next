@@ -176,15 +176,23 @@ export const postUserPreferences = async (userPreferences: any) => {
 
 export const watchHistory = async (
   videoId: string,
-  data: { watch_duration_seconds: number; completed: boolean, video_duration_seconds?: number },
+  data: {
+    watch_duration_seconds: number;
+    completed: boolean;
+    video_duration_seconds?: number;
+  },
 ) => {
   return axios
     .post(`${BASE_URL}/watch/${videoId}`, data, { withCredentials: true })
     .then((res) => res.data);
 };
 
-export const getWatchHistory = async ():Promise<WatchHistoryitem[]> => {
+export const getWatchHistory = async (): Promise<WatchHistoryitem[]> => {
   return axios
     .get(`${BASE_URL}/watch/history`, { withCredentials: true })
     .then((res) => res.data);
+};
+
+export const getGlobalTrending = async () => {
+  return axios.get(`${BASE_URL}/videos/trending`).then((res) => res.data);
 };

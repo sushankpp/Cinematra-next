@@ -52,7 +52,7 @@ export default function RootLayout({
         <AuthProvider>
           <Header />
 
-          <main>
+          <main className="pt-[73px]">
             <OnboardingGate />
             {children}
           </main>

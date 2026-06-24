@@ -20,6 +20,7 @@ export function RelatedVideos({ videos }: { videos: Video[] }) {
           }
           views={`${video.views}`}
           isMenuOpen={false}
+          variant="compact"
         />
       ))}
     </div>

@@ -3,6 +3,7 @@ import { VideoInfo } from "@/components/sections/video/VideoInfo";
 import { VideoPlayer } from "@/components/sections/video/VideoPlayer";
 import Container from "@/components/ui/Container";
 import { getVideo, getVideos } from "@/lib/api";
+import { getPersonalTrending, getRecommendations } from "@/lib/serverApi";
 
 export default async function VideoPage({
   params,
@@ -13,6 +14,10 @@ export default async function VideoPage({
   const [video, allVideos] = await Promise.all([getVideo(id), getVideos()]);
 
   if (!video) return <p>Video not found</p>;
+
+  const trending = await getPersonalTrending();
+  const recommend = await getRecommendations();
+  console.log("Trending for you: ", trending, "Recommendations: ", recommend);
 
   const relatedVideos = allVideos.filter(
     (v: { id: string }) => v.id !== video.id,

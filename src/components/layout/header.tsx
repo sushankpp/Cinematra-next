@@ -10,12 +10,29 @@ import UserButton from "../ui/UserButton";
 import { useAuth } from "@/hooks/useAuth";
 import UserProfile from "../ui/UserProfile";
 import { PlusIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Header() {
   const { user, isAuthenticated } = useAuth();
-  console.log(user);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 bg-secondary-Body/80 backdrop-blur-md border-b border-[rgba(255,255,255,0.05)]">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? "bg-secondary-Body/95 backdrop-blur-md border-b border-[rgba(255,255,255,0.05)] shadow-lg shadow-black/20"
+          : "bg-gradient-to-b from-black/60 to-transparent border-b border-transparent"
+      }`}
+    >
       <Container>
         <div className="flex items-center justify-between py-4">
           <Link href="/">

@@ -19,6 +19,7 @@ export default function VideoCard({
   className,
   variant = "default",
   isMenuOpen,
+  similarityScore,
   onMenuToggle,
   items,
   ...props
@@ -54,6 +55,13 @@ export default function VideoCard({
             isCompact ? "w-full h-full object-cover" : "w-full h-auto",
           )}
         />
+        {similarityScore !== undefined && (
+          <div className="absolute top-0 left-0">
+            <span className="bg-red-text text-white text-[12px] font-semibold px-2 py-1 rounded-br-lg">
+              Similarity: {Math.round(similarityScore * 100)}%
+            </span>
+          </div>
+        )}
       </figure>
 
       <div className={cn("flex gap-3", !isCompact && "mt-1 gap-4")}>
@@ -104,10 +112,7 @@ export default function VideoCard({
           className="p-2 rounded-full hover:bg-[#2a2a2a]"
           onClick={onMenuToggle}
         />
-        <OptionsDropdown
-          isOpen={isMenuOpen}
-          items={items ?? []}
-        />
+        <OptionsDropdown isOpen={isMenuOpen} items={items ?? []} />
       </div>
 
       <Link

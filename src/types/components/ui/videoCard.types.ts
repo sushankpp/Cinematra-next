@@ -6,7 +6,7 @@ export type DropdownItem = {
 };
 
 export type VideoGridProps = {
-  videos: Video[];
+  videos?: Video[];
   items?: DropdownItem[];
   getItems?: (video: Video) => DropdownItem[];
 };
@@ -24,11 +24,13 @@ export interface VideoCardProps extends React.HTMLAttributes<HTMLDivElement> {
   isMenuOpen: boolean;
   items?: DropdownItem[];
   variant?: "default" | "compact";
+  similarityScore?: number;
 }
 
 export interface Video {
   id: string;
   title: string;
+  description?: string;
   thumbnail_url: string;
   storage_url: string;
   created_at: string;
@@ -38,6 +40,7 @@ export interface Video {
     picture?: string;
   };
   views: string;
+  similarity_score?: number;
 }
 
 export interface VideoUploadData {
@@ -63,7 +66,6 @@ export interface TagFromDB {
   name: string;
   slug: string;
 }
-
 
 export interface WatchHistoryitem {
   id: string;
