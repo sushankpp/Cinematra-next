@@ -15,18 +15,26 @@ export interface TrendingVideo {
     picture?: string;
   };
   views: string;
-  video_genres?: { id: number; name: string }[];
-  video_tags?: { id: number; name: string }[];
+  genres?: { genres: { id: number; name: string } }[];
+  tags?: { tags: { id: number; name: string } }[];
 }
 
 export interface TrendingHeroSlideProps {
   title: string;
+  description: string;
   thumbnail_url: string;
   storage_url: string;
   creatorName: string;
   creatorProfile?: string;
   views: string;
   isActive: boolean;
+  onInfoClick: () => void;
+  isInfoClicked: boolean;
+  genres?: { genres: { id: number; name: string } }[];
+  tags?: { tags: { id: number; name: string } }[];
+  language?: string;
+  contentRating?: string;
+  releaseYear?: number;
 }
 
 export interface TrendingSliderProps {

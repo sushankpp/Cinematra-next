@@ -41,6 +41,11 @@ export interface Video {
   };
   views: string;
   similarity_score?: number;
+  video_genres?: { genres: { id: number; name: string } }[];
+  video_tags?: { tags: { id: number; name: string } }[];
+  language?: string;
+  content_rating?: string;
+  release_year?: number;
 }
 
 export interface VideoUploadData {

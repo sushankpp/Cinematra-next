@@ -18,6 +18,7 @@ export function TrendingSlider({ videos }: { videos: Video[] }) {
   );
   const [activeIndex, setActiveIndex] = useState(0);
   const [slideCount, setSlideCount] = useState(0);
+  const [isInfoClicked, setIsInfoClicked] = useState(false);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -63,6 +64,14 @@ export function TrendingSlider({ videos }: { videos: Video[] }) {
                 creatorProfile={video.users.picture}
                 views={video.views}
                 isActive={index === activeIndex}
+                onInfoClick={() => {setIsInfoClicked(prev => !prev), console.log("Info button clicked")}}
+                isInfoClicked={isInfoClicked}
+                description={video.description ? video.description : "No description available."}
+                genres={video.video_genres}
+                tags={video.video_tags}
+                language={video.language}
+                contentRating={video.content_rating}
+                releaseYear={video.release_year}
               />
             </div>
           ))}

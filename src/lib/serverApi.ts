@@ -13,6 +13,10 @@ async function getAuthCookie() {
 export const getRecommendations = async () => {
   const cookie = await getAuthCookie();
 
+  console.log("Auth cookie:", cookie);
+
+  if (!cookie) return [];
+
   return axios
     .get(`${BASE_URL}/videos/recommendations`, { headers: { Cookie: cookie } })
     .then((res) => res.data);
@@ -20,6 +24,8 @@ export const getRecommendations = async () => {
 
 export const getPersonalTrending = async () => {
   const cookie = await getAuthCookie();
+
+  if (!cookie) return [];
 
   return axios
     .get(`${BASE_URL}/videos/trending/me`, { headers: { Cookie: cookie } })

@@ -80,7 +80,7 @@ async function TrendingVideoFetcher() {
 
   const trending =
     personalTrending.length > 0 ? personalTrending : globalTrending;
-  // console.log("Displaying trending videos:", trending);
+  console.log("Displaying trending videos:", trending);
 
   return <TrendingSlider videos={trending} />;
 }

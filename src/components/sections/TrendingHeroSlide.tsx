@@ -1,17 +1,27 @@
-import { PlayCircleIcon, Info } from "lucide-react";
+import { PlayCircleIcon, Info, X } from "lucide-react";
 import { Heading } from "../ui/Heading";
 import Link from "../ui/Link";
 import Image from "../ui/Image";
 import { TrendingHeroSlideProps } from "@/types/components/sections/TrendingHeroSlide.types";
+import Button from "../ui/Button";
+import { TrendingInfo } from "./TrendingInfo";
 
 export function TrendingHeroSlide({
   title,
+  description,
   thumbnail_url,
   storage_url,
   creatorName,
   creatorProfile,
+  genres,
+  tags,
+  language,
+  contentRating,
+  releaseYear,
   views,
   isActive,
+  onInfoClick,
+  isInfoClicked,
 }: TrendingHeroSlideProps) {
   return (
     <div className="relative h-full w-full">
@@ -29,7 +39,7 @@ export function TrendingHeroSlide({
       <div className="absolute inset-0 flex items-end z-10">
         <div className="px-6 md:px-16 lg:px-24 pb-[200px] max-w-3xl">
           <div
-            className={`flex items-center gap-2 mb-4 transition-all duration-700 delay-100 ${
+            className={`flex flex-col items-center gap-2 mb-4 transition-all duration-700 delay-100 ${
               isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
           >
@@ -38,10 +48,13 @@ export function TrendingHeroSlide({
               level={1}
               className="font-headline line-clamp-3 text-primary-text text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-3"
             />
+            <p className="text-primary-text/80 text-lg md:text-xl lg:text-2xl font-body line-clamp-3">
+              {description}
+            </p>
           </div>
 
           <div
-            className={`transition-all duration-700 delay-200 flex gap-2 ${
+            className={`transition-all duration-700 delay-200 flex items-center gap-3 mb-6 ${
               isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
             }`}
           >
@@ -49,45 +62,57 @@ export function TrendingHeroSlide({
               <Image
                 src={creatorProfile}
                 alt={creatorName}
-                className="w-8 h-8 rounded-full border border-white/20"
+                className="w-8 h-8 rounded-full border border-white/20 object-cover"
               />
             )}
-            <span className="text-red-text text-sm font-body">
+            <span className="text-sm font-body text-primary-text/70">
               by{" "}
               <Link
                 href={storage_url}
-                className="text-primary-text hover:text-red-text transition-colors underline-offset-2 hover:underline"
+                className="text-primary-text font-medium hover:text-red-text transition-colors underline-offset-2 hover:underline"
               >
                 {creatorName}
               </Link>
             </span>
-            <div
-              className={`flex items-center gap-4 text-sm text-tertiary-Shade font-body mb-8 transition-all duration-700 delay-[350ms] ${
-                isActive
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-4"
-              }`}
-            >
-              <span className="text-primary-text/60">{views} views</span>
-            </div>
+            <span className="w-1 h-1 rounded-full bg-primary-text/30" />
+            <span className="text-sm font-body text-primary-text/60">
+              {views} views
+            </span>
           </div>
 
-          <div
-            className={`flex gap-3 transition-all duration-700 delay-[400ms] ${
-              isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-            }`}
-          >
-            <Link
-              href={storage_url}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary-active hover:bg-red-500/90 text-white font-body font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-primary-active/30 hover:scale-[1.02] active:scale-[0.98]"
+          <div className="relative">
+            <div
+              className={`flex gap-3 transition-all duration-700 delay-[400ms] ${
+                isActive
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-6"
+              }`}
             >
-              <PlayCircleIcon size={18} />
-              Watch Now
-            </Link>
-            <div className="inline-flex items-center gap-2 px-6 py-3 z-10 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-primary-text font-body font-semibold text-sm transition-all duration-300 hover:bg-white/20 hover:border-white/30 hover:scale-[1.02] active:scale-[0.98]">
-              <Info size={18} />
-              More Info
+              <Link
+                href={storage_url}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary-active hover:bg-red-500/90 text-white font-body font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-primary-active/30 hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <PlayCircleIcon size={18} />
+                Watch Now
+              </Link>
+              <Button
+                className={`inline-flex items-center gap-2 px-6 py-3 z-10 rounded-lg bg-white/30 backdrop-blur-md border font-body font-semibold text-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]`}
+                onClick={onInfoClick}
+              >
+                <Info size={18} />
+                More Info
+              </Button>
             </div>
+            <TrendingInfo 
+              isInfoClicked={isInfoClicked}
+              onInfoClick={onInfoClick}
+              genres={genres}
+              tags={tags}
+              views={views}
+              language={language}
+              contentRating={contentRating}
+              releaseYear={releaseYear}
+            />
           </div>
         </div>
       </div>
