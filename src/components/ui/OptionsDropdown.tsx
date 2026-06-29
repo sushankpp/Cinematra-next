@@ -1,9 +1,12 @@
 import Image from "./Image";
 import { optionsDropdownProps } from "@/types/components/ui/optionsDropdown";
 import NavItem from "../layout/nav/NavItem";
+import { Initials } from "@/services/initials";
 
 export default function OptionsDropdown({
   src,
+  firstName = "",
+  lastName = "",
   alt,
   name,
   isOpen,
@@ -25,7 +28,7 @@ export default function OptionsDropdown({
     >
       {(src || name) && (
         <div className="flex items-center gap-3 border-b border-white/10 px-3 py-3">
-          {src && (
+          {src ? (
             <figure className="h-10 w-10 shrink-0 overflow-hidden rounded-full ring-1 ring-white/15">
               <Image
                 src={src}
@@ -35,6 +38,10 @@ export default function OptionsDropdown({
                 className="h-full w-full object-cover"
               />
             </figure>
+          ) : (
+            <div className="h-10 w-10 shrink-0 rounded-full bg-neutral-default/40 backdrop-blur-md border border-white/5 flex items-center justify-center text-white font-bold text-sm bg-gradient-to-tr from-red-text to-tertiary-Shade">
+              {Initials(firstName , lastName)}
+            </div>
           )}
 
           {name && (

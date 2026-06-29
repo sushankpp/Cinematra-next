@@ -1,5 +1,7 @@
 export interface optionsDropdownProps extends React.HTMLAttributes<HTMLDivElement> {
     src?: string;
+    firstName?: string;
+    lastName?: string;
     alt?: string;
     name?: string;
     isOpen: boolean;

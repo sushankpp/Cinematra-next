@@ -13,7 +13,7 @@ async function getAuthCookie() {
 export const getRecommendations = async () => {
   const cookie = await getAuthCookie();
 
-  console.log("Auth cookie:", cookie);
+  // console.log("Auth cookie:", cookie);
 
   if (!cookie) return [];
 
@@ -29,5 +29,15 @@ export const getPersonalTrending = async () => {
 
   return axios
     .get(`${BASE_URL}/videos/trending/me`, { headers: { Cookie: cookie } })
+    .then((res) => res.data);
+};
+
+export const getChannels = async () => {
+  const cookie = await getAuthCookie();
+
+  if (!cookie) return [];
+
+  return axios
+    .get(`${BASE_URL}/channels`, { headers: { Cookie: cookie } })
     .then((res) => res.data);
 };

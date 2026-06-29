@@ -7,6 +7,7 @@ import { formatCommentTime } from "@/lib/formatCommentTime";
 import Button from "./Button";
 import { MoreVertical } from "lucide-react";
 import OptionsDropdown from "./OptionsDropdown";
+import { Initials } from "@/services/initials";
 
 export default function VideoCard({
   creatorName,
@@ -30,7 +31,6 @@ export default function VideoCard({
     <div
       className={cn(
         "relative group/videoCard cursor-pointer transition-all duration-300",
-        // layout switches based on variant
         isCompact
           ? "flex gap-3 rounded-xl p-2 hover:bg-tertiary-Shade/30"
           : "hover:shadow-lg hover:bg-tertiary-Shade/30 rounded-[25px] p-3",
@@ -65,13 +65,16 @@ export default function VideoCard({
       </figure>
 
       <div className={cn("flex gap-3", !isCompact && "mt-1 gap-4")}>
-        {/* creator avatar — hidden in compact */}
-        {creatorProfile && !isCompact && (
+        {creatorProfile && !isCompact ? (
           <Image
             src={creatorProfile}
             alt="creator image"
             className="w-[40px] h-[40px] rounded-full"
           />
+        ) : (
+          <div className="w-[40px] h-[40px] shrink-0 rounded-full bg-neutral-default/40 backdrop-blur-md border border-white/5 flex items-center justify-center text-white font-bold text-sm bg-gradient-to-tr from-primary-active to-secondary-default">
+            {Initials(creatorName.split(" ")[0], creatorName.split(" ")[1])}
+          </div>
         )}
         <div className="min-w-0">
           <Heading

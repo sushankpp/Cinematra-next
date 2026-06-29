@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import { RootLayoutWrapper } from "@/components/layout/RootLayoutWrapper";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "sonner";
 import { cn } from "@/lib/util";
@@ -50,14 +49,11 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-secondary-Body">
         <NextTopLoader color="#e50914" height={3} showSpinner={false} />
         <AuthProvider>
-          <Header />
-
-          <main className="pt-[73px]">
-            <OnboardingGate />
+          <OnboardingGate />
+          <RootLayoutWrapper>
             {children}
-          </main>
+          </RootLayoutWrapper>
           <Toaster position="top-right" richColors />
-          <Footer />
         </AuthProvider>
       </body>
     </html>

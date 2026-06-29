@@ -5,6 +5,7 @@ import Image from "../ui/Image";
 import { TrendingHeroSlideProps } from "@/types/components/sections/TrendingHeroSlide.types";
 import Button from "../ui/Button";
 import { TrendingInfo } from "./TrendingInfo";
+import { Initials } from "@/services/initials";
 
 export function TrendingHeroSlide({
   title,
@@ -58,12 +59,16 @@ export function TrendingHeroSlide({
               isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
             }`}
           >
-            {creatorProfile && (
+            {creatorProfile ? (
               <Image
                 src={creatorProfile}
                 alt={creatorName}
                 className="w-8 h-8 rounded-full border border-white/20 object-cover"
               />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-neutral-default/40 backdrop-blur-md border border-white/5 flex items-center justify-center text-white font-bold text-sm bg-gradient-to-tr from-primary-active to-secondary-default">
+                {Initials(creatorName.split(" ")[0], creatorName.split(" ")[1])}
+              </div>
             )}
             <span className="text-sm font-body text-primary-text/70">
               by{" "}
