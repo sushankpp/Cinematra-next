@@ -3,4 +3,6 @@ export interface Comment {
   users: { first_name: string; last_name: string; picture: string; };
   content: string;
   created_at: string;
+  moderation_label?: string;
+  moderation_confidence?: number;
 }
