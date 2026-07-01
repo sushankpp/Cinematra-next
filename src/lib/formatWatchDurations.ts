@@ -1,0 +1,24 @@
+export const getProgressPercent = (watched: number, total: number) => {
+  if (!total || total <= 0) return 0;
+  return Math.min(100, Math.max(0, (watched / total) * 100));
+};
+
+export const formatDuration = (seconds: number) => {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  if (m === 0) return `${s}s watched`;
+  return `${m}m ${s}s watched`;
+};
+
+export const formatFullDuration = (watched: number, total: number) => {
+  if (!total || total <= 0) return ""
+
+  const fmt = (s: number) => {
+    const m = Math.floor(s / 60)
+    const sec = String(Math.floor(s % 60)).padStart(2, "0")
+    return `${m}:${sec}`
+  }
+
+  if (!watched || watched <= 0) return fmt(total)
+  return `${fmt(watched)} / ${fmt(total)}`
+}

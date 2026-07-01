@@ -1,12 +1,13 @@
-// CommentInput.tsx
 "use client";
 import Image from "@/components/ui/Image";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import { Initials } from "@/services/initials";
 
 interface CommentInputProps {
   value: string;
-  userAvatar: string;
+  userName: string;
+  userAvatar?: string;
   isAuthenticated: boolean;
   commentFocused: boolean;
   onChange: (text: string) => void;
@@ -17,6 +18,7 @@ interface CommentInputProps {
 
 export function CommentInput({
   value,
+  userName,
   userAvatar,
   isAuthenticated,
   commentFocused,
@@ -28,14 +30,20 @@ export function CommentInput({
   return (
     <div className="flex items-start gap-3">
       <figure className="w-[40px] h-[40px] shrink-0">
-        <Image
-          src={userAvatar ?? ""}
-          alt=""
-          width={40}
-          height={40}
-          className="rounded-full"
-          referrerPolicy="no-referrer"
-        />
+        {userAvatar ? (
+          <Image
+            src={userAvatar ?? ""}
+            alt=""
+            width={40}
+            height={40}
+            className="rounded-full"
+            referrerPolicy="no-referrer"
+          />
+        ) : (
+          <div className="h-10 w-10 shrink-0 rounded-full bg-neutral-default/40 backdrop-blur-md border border-white/5 flex items-center justify-center text-white font-bold text-sm bg-gradient-to-tr from-red-text to-tertiary-Shade">
+            {Initials(userName.split(" ")[0], userName.split(" ")[1])}
+          </div>
+        )}
       </figure>
       <div className="w-full">
         <div className="relative group/input">

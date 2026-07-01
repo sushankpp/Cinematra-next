@@ -41,3 +41,15 @@ export const getChannels = async () => {
     .get(`${BASE_URL}/channels`, { headers: { Cookie: cookie } })
     .then((res) => res.data);
 };
+
+export const getVideos = async () => {
+  const cookie = await getAuthCookie();
+
+  if (!cookie) return [];
+
+  const res = await fetch(`${BASE_URL}/videos`, {
+    headers: { Cookie: cookie },
+  });
+  if (!res.ok) throw new Error("Failed to fetch videos");
+  return res.json();
+};

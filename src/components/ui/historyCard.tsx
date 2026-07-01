@@ -2,20 +2,9 @@ import Image from "@/components/ui/Image";
 import Link from "@/components/ui/Link";
 import { formatCommentTime } from "@/lib/formatCommentTime";
 import { WatchHistoryitem } from "@/types/components/ui/videoCard.types";
+import { formatDuration, getProgressPercent } from "@/lib/formatWatchDurations";
 
 export function HistoryCard({ video }: { video: WatchHistoryitem }) {
-  const getProgressPercent = (watched: number, total: number) => {
-    if (!total || total <= 0) return 0;
-    return Math.min(100, Math.max(0, (watched / total) * 100));
-  };
-
-  const formatDuration = (seconds: number) => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    if (m === 0) return `${s}s watched`;
-    return `${m}m ${s}s watched`;
-  };
-
   return (
     <Link
       href={`/video/${video.videos?.id}`}

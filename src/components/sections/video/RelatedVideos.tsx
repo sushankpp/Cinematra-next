@@ -8,7 +8,7 @@ export function RelatedVideos({ videos }: { videos: Video[] }) {
       {videos.map((video, _) => (
         <VideoCard
           key={video.id}
-          creatorProfile={video.users?.picture ?? ""}
+          creatorProfile={video.users?.picture}
           videoId={video.id}
           videoTitle={video.title}
           videoThumbnail={video.thumbnail_url}
@@ -21,6 +21,9 @@ export function RelatedVideos({ videos }: { videos: Video[] }) {
           views={`${video.views}`}
           isMenuOpen={false}
           variant="compact"
+          watchedDuration={video.watch_duration_seconds}
+          totalDuration={video.video_duration_seconds}
+          completed={video.completed}
         />
       ))}
     </div>

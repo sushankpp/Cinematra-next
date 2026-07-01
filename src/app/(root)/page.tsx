@@ -3,8 +3,8 @@ import { VideoGridSkeleton } from "@/components/skeletons/VideoGridSkeleton";
 import Container from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { VideoGrid } from "@/components/ui/VideoGrid";
-import { getVideos, getGlobalTrending } from "@/lib/api";
-import { getPersonalTrending, getRecommendations } from "@/lib/serverApi";
+import { getGlobalTrending } from "@/lib/api";
+import { getVideos, getPersonalTrending, getRecommendations } from "@/lib/serverApi";
 import { Suspense } from "react";
 
 export const items = [{ label: "Share" }];
@@ -55,6 +55,7 @@ async function VideoGridFetcher() {
 
 async function AllVideos() {
   const videos = await getVideos();
+  console.log("Fetched all videos:", videos);
   return (
     <Container>
       <Heading
@@ -80,7 +81,7 @@ async function TrendingVideoFetcher() {
 
   const trending =
     personalTrending.length > 0 ? personalTrending : globalTrending;
-  console.log("Displaying trending videos:", trending);
+  // console.log("Displaying trending videos:", trending);
 
   return <TrendingSlider videos={trending} />;
 }

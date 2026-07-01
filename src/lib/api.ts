@@ -26,16 +26,10 @@ export async function apiCall<T>(
   }
 }
 
-export const getVideos = async () => {
-  const res = await fetch(`${BASE_URL}/videos`, {
-    cache: "no-store",
-  });
-  if (!res.ok) throw new Error("Failed to fetch videos");
-  return res.json();
-};
-
 export const getVideo = async (id: string) => {
-  const res = await fetch(`${BASE_URL}/videos/${id}`);
+  const res = await fetch(`${BASE_URL}/videos/${id}`, {
+    credentials: "include",
+  });
   if (!res.ok) throw new Error("Failed to fetch video");
   return res.json();
 };
@@ -195,4 +189,17 @@ export const getWatchHistory = async (): Promise<WatchHistoryitem[]> => {
 
 export const getGlobalTrending = async () => {
   return axios.get(`${BASE_URL}/videos/trending`).then((res) => res.data);
+};
+
+export const postVideoReaction = async (
+  videoId: string,
+  reactionType: "like" | "dislike",
+) => {
+  return axios
+    .post(
+      `${BASE_URL}/videos/${videoId}/react`,
+      { reaction_type: reactionType },
+      { withCredentials: true },
+    )
+    .then((res) => res.data);
 };

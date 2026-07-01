@@ -6,8 +6,8 @@ export interface VideoCardProps extends React.HTMLAttributes<HTMLDivElement> {
         views: string;
         created_at: string;
         user_id: string;
-        likes?: string;
-        dislikes?: string;
+        likes_count: number;
+        dislikes_count: number;
         users: {
             first_name: string;
             last_name: string;

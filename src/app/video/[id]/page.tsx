@@ -2,8 +2,8 @@ import { RelatedVideos } from "@/components/sections/video/RelatedVideos";
 import { VideoInfo } from "@/components/sections/video/VideoInfo";
 import { VideoPlayer } from "@/components/sections/video/VideoPlayer";
 import Container from "@/components/ui/Container";
-import { getVideo, getVideos } from "@/lib/api";
-import { getPersonalTrending, getRecommendations } from "@/lib/serverApi";
+import { getVideo } from "@/lib/api";
+import { getPersonalTrending, getRecommendations, getVideos } from "@/lib/serverApi";
 
 export default async function VideoPage({
   params,

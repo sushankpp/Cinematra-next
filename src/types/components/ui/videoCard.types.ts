@@ -25,6 +25,9 @@ export interface VideoCardProps extends React.HTMLAttributes<HTMLDivElement> {
   items?: DropdownItem[];
   variant?: "default" | "compact";
   similarityScore?: number;
+  watchedDuration: number;
+  totalDuration: number;
+  completed?: boolean;
 }
 
 export interface Video {
@@ -46,6 +49,9 @@ export interface Video {
   language?: string;
   content_rating?: string;
   release_year?: number;
+  watch_duration_seconds: number;
+  video_duration_seconds: number;
+  completed?: boolean;
 }
 
 export interface VideoUploadData {

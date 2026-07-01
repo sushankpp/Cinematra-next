@@ -6,7 +6,7 @@ import Button from "@/components/ui/Button";
 import Image from "@/components/ui/Image";
 import { VideoComments } from "./VideoComments";
 import { formatNumber } from "@/lib/formatNumber";
-import { useSubscription } from "@/hooks/useSubscription";
+import { useVideoInfo } from "@/hooks/useVideoInfo";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,10 +19,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { formatCommentTime } from "@/lib/formatCommentTime";
+import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
+import { postVideoReaction } from "@/lib/api";
 
 export function VideoInfo({ video }: VideoCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
+  const [likeState, setLikeState] = useState(false);
+  const [likes, setLikes] = useState(video.likes_count);
   const descRef = useRef<HTMLParagraphElement>(null);
   const {
     subCount,
@@ -31,7 +35,7 @@ export function VideoInfo({ video }: VideoCardProps) {
     loadingSub,
     handleSubscribe,
     handleUnsubscribe,
-  } = useSubscription(video.user_id);
+  } = useVideoInfo(video.user_id);
 
   console.log("VideoInfo :", video);
 
@@ -50,6 +54,20 @@ export function VideoInfo({ video }: VideoCardProps) {
   const handleDescriptionToggle = () => {
     setExpanded((prev) => !prev);
   };
+
+  const handleLikes = async () => {
+    setLikeState((prev) => !prev);
+    setLikes((prev) => prev + 1);
+
+    try {
+      const response = await postVideoReaction(video.id, "like");
+      setLikes(video.likes_count);
+    } catch (error) {
+      console.error("Error sending like reaction:", error);
+    }
+  };
+
+  console.log("likes", video.likes_count);
 
   return (
     <div>
@@ -128,6 +146,27 @@ export function VideoInfo({ video }: VideoCardProps) {
               disabled={loadingSub}
             />
           )}
+        </div>
+        <div className="flex gap-2">
+          <Button
+            variant="none"
+            className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 ease-in-out"
+            onClick={handleLikes}
+          >
+            {likeState ? (
+              <ThumbsUpIcon className="w-5 h-5 text-blue-500" />
+            ) : (
+              <ThumbsUpIcon className="w-5 h-5 text-primary-text" />
+            )}
+            <span className="ml-2 text-primary-text text-[16px]">{likes}</span>
+          </Button>
+          <Button
+            variant="none"
+            className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 ease-in-out"
+          >
+            <ThumbsDownIcon className="w-5 h-5 text-primary-text" />
+            <span className="ml-2 text-primary-text text-[16px]">12</span>
+          </Button>
         </div>
       </div>
 

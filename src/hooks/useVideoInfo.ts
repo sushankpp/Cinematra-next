@@ -8,7 +8,7 @@ import {
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 
-export function useSubscription(channelId: string) {
+export function useVideoInfo(channelId: string) {
   const { user } = useAuth();
   const [subCount, setSubCount] = useState(0);
   const [loadingSub, setLoadingSub] = useState(false);

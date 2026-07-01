@@ -31,6 +31,9 @@ export function VideoGrid({ videos = [], items, getItems }: VideoGridProps) {
               }
               items={getItems ? getItems(video) : items}
               similarityScore={video.similarity_score}
+              watchedDuration={video.watch_duration_seconds}
+              totalDuration={video.video_duration_seconds}
+              completed={video.completed}
             />
           ))}
         </div>

@@ -14,11 +14,11 @@ export function VideoPlayer({
 }: VideoPlayerProps) {
   const videoControls = useVideoPlayer(src);
   const viewSent = useRef(false);
+  const progressInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const handleFirstPlay = () => {
     if (!viewSent.current) {
       viewSent.current = true;
-      console.log("Sending view for video:", videoId);
       sendViews(videoId)
         .then((res) => {
           console.log("View sent successfully for video:", videoId);
@@ -27,6 +27,42 @@ export function VideoPlayer({
           viewSent.current = false;
         });
     }
+  };
+
+  const handlePlay = () => {
+    handleFirstPlay();
+    progressInterval.current = setInterval(() => {
+      if (videoControls.videoRef.current) {
+        watchHistory(videoId, {
+          watch_duration_seconds: Math.floor(
+            videoControls.videoRef.current.currentTime,
+          ),
+          video_duration_seconds: Math.floor(
+            videoControls.videoRef.current.duration,
+          ),
+          completed: false,
+        });
+      }
+    }, 1000);
+  };
+
+  const handlePause = () => {
+    if (progressInterval.current) clearInterval(progressInterval.current);
+    watchHistory(videoId, {
+      watch_duration_seconds: Math.floor(videoControls.currentTime),
+      video_duration_seconds: Math.floor(videoControls.duration),
+      completed: false,
+    });
+  };
+
+  const handleEnded = () => {
+    if (progressInterval.current) clearInterval(progressInterval.current);
+    videoControls.setIsPlaying(false);
+    watchHistory(videoId, {
+      watch_duration_seconds: Math.floor(videoControls.duration),
+      video_duration_seconds: Math.floor(videoControls.duration),
+      completed: true,
+    });
   };
 
   return (
@@ -55,22 +91,9 @@ export function VideoPlayer({
               videoControls.videoRef.current?.currentTime || 0,
             )
           }
-          onPlay={handleFirstPlay}
-          onPause={() =>
-            watchHistory(videoId, {
-              watch_duration_seconds: Math.floor(videoControls.currentTime),
-              completed: false,
-              video_duration_seconds: Math.floor(videoControls.duration),
-            })
-          }
-          onEnded={() => {
-            videoControls.setIsPlaying(false);
-            watchHistory(videoId, {
-              watch_duration_seconds: Math.floor(videoControls.duration),
-              completed: true,
-              video_duration_seconds: Math.floor(videoControls.duration),
-            });
-          }}
+          onPlay={handlePlay}
+          onPause={handlePause}
+          onEnded={handleEnded}
         />
 
         <VideoControls {...videoControls} />
