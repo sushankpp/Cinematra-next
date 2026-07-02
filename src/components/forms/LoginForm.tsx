@@ -10,9 +10,11 @@ import Button from "@/components/ui/Button";
 import Link from "@/components/ui/Link";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/auth.service";
+import { useAuth } from "@/hooks/useAuth";
 
 export function LoginForm() {
   const router = useRouter();
+  const  { refreshUser } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -41,6 +43,7 @@ export function LoginForm() {
     }
 
     if (res) {
+      await refreshUser();
       router.push("/");
     }
   };

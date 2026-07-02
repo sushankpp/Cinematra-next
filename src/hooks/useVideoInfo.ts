@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   getSubscriptionCount,
   subscribe,
@@ -7,13 +7,25 @@ import {
 } from "@/lib/api";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
+import { postVideoReaction } from "@/lib/api";
+import { VideoCardProps } from "@/types/components/sections/video/videoInfo.types";
 
-export function useVideoInfo(channelId: string) {
+export function useVideoInfo(video: VideoCardProps["video"]) {
   const { user } = useAuth();
   const [subCount, setSubCount] = useState(0);
   const [loadingSub, setLoadingSub] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [loadingCount, setLoadingCount] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+  const [isClamped, setIsClamped] = useState(false);
+  const [likeState, setLikeState] = useState<"like" | "dislike" | null>(
+    video.user_reaction || null
+  );
+  const [likes, setLikes] = useState<number>(video.likes_count);
+  const [dislikes, setDislikes] = useState<number>(video.dislikes_count);
+  const descRef = useRef<HTMLParagraphElement>(null);
+  const [loadingReaction, setLoadingReaction] = useState(false);
+  const channelId = video.user_id;
 
   useEffect(() => {
     let cancelled = false;
@@ -49,7 +61,7 @@ export function useVideoInfo(channelId: string) {
   const handleSubscribe = async () => {
     const previousCount = subCount;
 
-    if ( !user ) {
+    if (!user) {
       toast.error("You must be logged in to subscribe.");
       return;
     }
@@ -96,6 +108,79 @@ export function useVideoInfo(channelId: string) {
     }
   };
 
+  useEffect(() => {
+    const el = descRef.current;
+    if (!el) return;
+
+    const timer = setTimeout(() => {
+      el.classList.add("line-clamp-3");
+      const clamped = el.scrollHeight > el.clientHeight;
+      el.classList.remove("line-clamp-3");
+      setIsClamped(!!clamped);
+    });
+  }, [video.description]);
+
+  const handleDescriptionToggle = () => {
+    setExpanded((prev) => !prev);
+  };
+
+  const handleLikes = async () => {
+    const wasLiked = likeState === "like";
+    const wasDisliked = likeState === "dislike";
+    const newReaction = wasLiked ? null : "like";
+
+    if (loadingReaction) return;
+
+    setLoadingReaction(true);
+
+    setLikeState(newReaction);
+    setLikes((prev) => (wasLiked ? prev - 1 : prev + 1));
+    if (wasDisliked) {
+      setDislikes((prev) => prev - 1);
+    }
+
+    try {
+      await postVideoReaction(video.id, newReaction || "like");
+    } catch (error) {
+      console.error("Error updating reaction:", error);
+      setLikeState(likeState);
+      setLikes((prev) => (wasLiked ? prev + 1 : prev - 1));
+      if (wasDisliked) {
+        setDislikes((prev) => prev - 1);
+      }
+    } finally {
+      setLoadingReaction(false);
+    }
+  };
+
+  const handleDislikes = async () => {
+    const wasDisliked = likeState === "dislike";
+    const wasLiked = likeState === "like";
+    const newReaction = wasDisliked ? null : "dislike";
+
+    if (loadingReaction) return;
+    setLoadingReaction(true);
+
+    setLikeState(newReaction);
+    setDislikes((prev) => (wasDisliked ? prev - 1 : prev + 1));
+    if (wasLiked) {
+      setLikes((prev) => prev - 1);
+    }
+
+    try {
+      await postVideoReaction(video.id, newReaction || "dislike");
+    } catch (error) {
+      console.error("Error sending dislike reaction:", error);
+      setLikeState(likeState);
+      setDislikes((prev) => (wasDisliked ? prev + 1 : prev - 1));
+      if (wasLiked) {
+        setLikes((prev) => prev + 1);
+      }
+    } finally {
+      setLoadingReaction(false);
+    }
+  };
+
   return {
     subCount,
     isSubscribed,
@@ -103,5 +188,15 @@ export function useVideoInfo(channelId: string) {
     loadingSub,
     handleSubscribe,
     handleUnsubscribe,
+    expanded,
+    isClamped,
+    handleDescriptionToggle,
+    likeState,
+    likes,
+    dislikes,
+    handleLikes,
+    handleDislikes,
+    loadingReaction,
+    descRef,
   };
 }

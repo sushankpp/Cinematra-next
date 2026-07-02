@@ -52,6 +52,7 @@ export interface Video {
   watch_duration_seconds: number;
   video_duration_seconds: number;
   completed?: boolean;
+  user_reaction?: "like" | "dislike" | null;
 }
 
 export interface VideoUploadData {

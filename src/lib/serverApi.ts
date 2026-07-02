@@ -53,3 +53,25 @@ export const getVideos = async () => {
   if (!res.ok) throw new Error("Failed to fetch videos");
   return res.json();
 };
+
+export const getVideo = async (id: string) => {
+    const cookie = await getAuthCookie();
+
+  if (!cookie) return [];
+
+  const res = await fetch(`${BASE_URL}/videos/${id}`, {
+    headers: { Cookie: cookie },
+  });
+  if (!res.ok) throw new Error("Failed to fetch video");
+  return res.json();
+};
+
+export const getChannelAnalytics = async (days = 30) => {
+  const cookie = await getAuthCookie();
+
+  if (!cookie) return [];
+
+  return axios.get(`${BASE_URL}/dashboard/analytics?days=${days}`, {
+    headers: { Cookie: cookie },
+  }).then(res => res.data);
+}

@@ -8,6 +8,7 @@ export interface VideoCardProps extends React.HTMLAttributes<HTMLDivElement> {
         user_id: string;
         likes_count: number;
         dislikes_count: number;
+        user_reaction?: "like" | "dislike" | null;
         users: {
             first_name: string;
             last_name: string;
@@ -15,4 +16,5 @@ export interface VideoCardProps extends React.HTMLAttributes<HTMLDivElement> {
         }
     }
     subscriptionCount?: number;
+    user_reaction?: string;
 }

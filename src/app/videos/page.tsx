@@ -1,6 +1,6 @@
 import { VideoGridSkeleton } from "@/components/skeletons/VideoGridSkeleton";
 import { VideoGrid } from "@/components/ui/VideoGrid";
-import { getVideos } from "@/lib/api";
+import { getVideos } from "@/lib/serverApi";
 import { Suspense } from "react";
 
 export const items = [{ label: "Share" }];

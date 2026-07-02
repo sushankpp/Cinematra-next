@@ -55,7 +55,7 @@ async function VideoGridFetcher() {
 
 async function AllVideos() {
   const videos = await getVideos();
-  console.log("Fetched all videos:", videos);
+  // console.log("Fetched all videos:", videos);
   return (
     <Container>
       <Heading

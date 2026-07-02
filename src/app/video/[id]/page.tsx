@@ -2,7 +2,7 @@ import { RelatedVideos } from "@/components/sections/video/RelatedVideos";
 import { VideoInfo } from "@/components/sections/video/VideoInfo";
 import { VideoPlayer } from "@/components/sections/video/VideoPlayer";
 import Container from "@/components/ui/Container";
-import { getVideo } from "@/lib/api";
+import { getVideo } from "@/lib/serverApi";
 import { getPersonalTrending, getRecommendations, getVideos } from "@/lib/serverApi";
 
 export default async function VideoPage({
@@ -17,7 +17,7 @@ export default async function VideoPage({
 
   const trending = await getPersonalTrending();
   const recommend = await getRecommendations();
-  console.log("Trending for you: ", trending, "Recommendations: ", recommend);
+  // console.log("Trending for you: ", trending, "Recommendations: ", recommend);
 
   const relatedVideos = allVideos.filter(
     (v: { id: string }) => v.id !== video.id,
