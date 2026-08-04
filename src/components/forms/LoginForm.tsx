@@ -11,10 +11,12 @@ import Link from "@/components/ui/Link";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/auth.service";
 import { useAuth } from "@/hooks/useAuth";
+import { useLoading } from "@/context/LoadingContext";
 
 export function LoginForm() {
   const router = useRouter();
   const  { refreshUser } = useAuth();
+  const { showLoading, hideLoading } = useLoading();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -31,6 +33,7 @@ export function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     setServerError(null);
+    showLoading();
 
     const { data: res, error } = await authService.login({
       email: data.email,
@@ -38,6 +41,7 @@ export function LoginForm() {
     });
 
     if (error) {
+      hideLoading();
       setServerError(error);
       return;
     }
@@ -45,6 +49,7 @@ export function LoginForm() {
     if (res) {
       await refreshUser();
       router.push("/");
+      hideLoading();
     }
   };
 

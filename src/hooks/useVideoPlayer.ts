@@ -17,6 +17,7 @@ export function useVideoPlayer(src: string, videoId?: string) {
   const [volume, setVolume] = useState(1);
   const [playerFocused, setPlayerFocused] = useState(false);
   const [currentQuality, setCurrentQuality] = useState(-1);
+  const [bufferedEnd, setBufferedEnd] = useState(0);
   const [availableQualities, setAvailableQualities] = useState<
     { index: number; label: string; bitrate: number }[]
   >([]);
@@ -114,6 +115,34 @@ export function useVideoPlayer(src: string, videoId?: string) {
       setCurrentQuality(index);
     }
   };
+
+  //buffer level
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const updateBuffered = () => {
+      if (video.buffered.length > 0) {
+        for (let i = 0; i < video.buffered.length; i++) {
+          if (
+            video.buffered.start(i) <= video.currentTime &&
+            video.currentTime <= video.buffered.end(i)
+          ) {
+            setBufferedEnd(video.buffered.end(i));
+            break;
+          }
+        }
+      }
+    };
+
+    video.addEventListener("progress", updateBuffered);
+    video.addEventListener("timeupdate", updateBuffered);
+
+    return () => {
+      video.removeEventListener("progress", updateBuffered);
+      video.removeEventListener("timeupdate", updateBuffered);
+    };
+  }, []);
 
   useEffect(() => {
     const handleFullScreenChange = () => {
@@ -224,6 +253,15 @@ export function useVideoPlayer(src: string, videoId?: string) {
     }
   };
 
+  const handleMute = () => {
+    const video = videoRef.current;
+
+    if (!video) return;
+
+    video.muted = !video.muted;
+    setVolume(video.muted ? 0 : video.volume);
+  };
+
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!progressRef.current || !videoRef.current) return;
 
@@ -298,9 +336,11 @@ export function useVideoPlayer(src: string, videoId?: string) {
     playerFocused,
     currentQuality,
     availableQualities,
+    bufferedEnd,
     setPlayerFocused,
     handlePlayPause,
     handleSeek,
+    handleMute,
     handleMouseDown,
     handleVolume,
     handleVolumeDown,

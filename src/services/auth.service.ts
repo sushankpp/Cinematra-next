@@ -25,8 +25,8 @@ export const authService = {
       credentials: "include",
     }),
   
-  logout: () =>{
-    apiCall("/auth/logout", {
+  logout: () => {
+    return apiCall("/auth/logout", {
       method: "POST",
     })
   },

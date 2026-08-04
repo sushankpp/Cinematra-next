@@ -19,7 +19,7 @@ export function useVideoInfo(video: VideoCardProps["video"]) {
   const [expanded, setExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
   const [likeState, setLikeState] = useState<"like" | "dislike" | null>(
-    video.user_reaction || null
+    video.user_reaction || null,
   );
   const [likes, setLikes] = useState<number>(video.likes_count);
   const [dislikes, setDislikes] = useState<number>(video.dislikes_count);
@@ -113,11 +113,21 @@ export function useVideoInfo(video: VideoCardProps["video"]) {
     if (!el) return;
 
     const timer = setTimeout(() => {
-      el.classList.add("line-clamp-3");
-      const clamped = el.scrollHeight > el.clientHeight;
-      el.classList.remove("line-clamp-3");
-      setIsClamped(!!clamped);
-    });
+      const clone = el.cloneNode(true) as HTMLElement;
+      clone.style.position = "absolute";
+      clone.style.visibility = "hidden";
+      clone.style.height = "auto";
+      clone.style.width = `${el.clientWidth}px`;
+      clone.classList.add("line-clamp-3");
+      document.body.appendChild(clone);
+
+      const clamped = clone.scrollHeight > clone.clientHeight;
+      document.body.removeChild(clone);
+
+      setIsClamped(clamped);
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [video.description]);
 
   const handleDescriptionToggle = () => {

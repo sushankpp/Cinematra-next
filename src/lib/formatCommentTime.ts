@@ -1,7 +1,13 @@
 export const formatCommentTime = (timestamp: string) => {
   if (timestamp === "Just now") return timestamp;
 
-  const commentDate = new Date(timestamp);
+  // Ensure timestamps without timezone info are treated as UTC
+  let normalizedTimestamp = timestamp;
+  if (!/Z|[+-]\d{2}:\d{2}$/.test(timestamp)) {
+    normalizedTimestamp = timestamp + "Z";
+  }
+
+  const commentDate = new Date(normalizedTimestamp);
   if (Number.isNaN(commentDate.getTime())) return timestamp;
 
   const diff = Date.now() - commentDate.getTime();

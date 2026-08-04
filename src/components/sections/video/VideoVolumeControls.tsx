@@ -1,7 +1,8 @@
 import Button from "@/components/ui/Button";
 import { VideoControlProps } from "@/types/components/sections/video/videoControls.types";
-import { Fullscreen, Minimize, Volume } from "lucide-react";
+import { Fullscreen, Minimize } from "lucide-react";
 import { VideoQualitySelector } from "./VideoQualitySelector";
+import { getVolumeIcon } from "@/lib/volumeIcon";
 
 export function VideoVolumeControls({ ...props }: VideoControlProps) {
   return (
@@ -13,7 +14,8 @@ export function VideoVolumeControls({ ...props }: VideoControlProps) {
       />
       <div className="relative flex items-center group/volume hover:bg-white/10 transition-colors rounded-full duration-300 ease-in-out px-2">
         <Button
-          icon={<Volume />}
+          onClick={props.handleMute}
+          icon={getVolumeIcon(props.volume)}
           className="bg-transparent hover:bg-transparent px-2"
           title="Volume"
           aria-label="Volume"

@@ -1,6 +1,11 @@
 import type { Config } from "tailwindcss";
-
 export default {
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   theme: {
     container: {
       center: true,
@@ -20,7 +25,6 @@ export default {
         xl: "1440px",
       },
       fontFamily: {
-        // Primary fonts for the new theme
         headline: ["Playfair Display", "serif"],
         body: ["Hanken Grotesk", "sans-serif"],
       },

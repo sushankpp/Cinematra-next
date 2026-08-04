@@ -1,13 +1,18 @@
 import { VideoControlProps } from "@/types/components/sections/video/videoControls.types";
-
 export function VideoProgressControls({ ...props }: VideoControlProps) {
   return (
     <div
-      className="w-full h-1 bg-white/50 rounded-full cursor-pointer group/progress mb-2 relative"
+      className="w-full h-1 bg-white/30 rounded-full cursor-pointer group/progress mb-2 relative"
       ref={props.progressRef}
       onClick={props.handleSeek}
       onMouseDown={props.handleMouseDown}
     >
+      <div
+        className="absolute top-0 left-0 h-full bg-white/70 rounded-full"
+        style={{
+          width: `${(props.bufferedEnd / props.duration) * 100}%`,
+        }}
+      />
       <div
         className="h-full bg-red-500 rounded-full relative"
         style={{

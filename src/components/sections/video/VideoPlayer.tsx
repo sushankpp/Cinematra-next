@@ -30,6 +30,7 @@ export function VideoPlayer({
   };
 
   const handlePlay = () => {
+    videoControls.setIsPlaying(true);
     handleFirstPlay();
     progressInterval.current = setInterval(() => {
       if (videoControls.videoRef.current) {
@@ -47,6 +48,7 @@ export function VideoPlayer({
   };
 
   const handlePause = () => {
+    videoControls.setIsPlaying(false);
     if (progressInterval.current) clearInterval(progressInterval.current);
     watchHistory(videoId, {
       watch_duration_seconds: Math.floor(videoControls.currentTime),

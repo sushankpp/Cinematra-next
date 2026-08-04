@@ -1,15 +1,19 @@
 "use client";
 import { authService } from "@/services/auth.service";
 import { User, AuthContextType } from "@/types/context/authContext.types";
-import { createContext, useState, useEffect } from "react";
+import { useLoading } from "@/context/LoadingContext";
+import { createContext, useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { showLoading, hideLoading } = useLoading();
+  const router = useRouter();
 
-  const fetchUser = async () => {  
+  const fetchUser = useCallback(async () => {  
     const { data, error } = await authService.me();
 
     if (error || !data) {
@@ -18,17 +22,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser({...data.user, onboarding_completed: data.onboarding_completed});
     }
     setIsLoading(false);
-  };
+  }, []);
 
-  useEffect(() =>{
-    fetchUser();
-  },[]);
+  useEffect(() => {
+    // Loading overlay is already visible from initial state.
+    // Just fetch user and hide when done.
+    fetchUser().finally(() => {
+      hideLoading();
+    });
+  }, [fetchUser, hideLoading]);
 
   const refreshUser = () => fetchUser();
 
   const Logout = async () => {
-    authService.logout();
+    showLoading();
+    await authService.logout();
     setUser(null);
+    router.push("/");
+    hideLoading();
   };
 
   return (

@@ -10,9 +10,13 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/auth.service";
+import { useLoading } from "@/context/LoadingContext";
+import { useAuth } from "@/hooks/useAuth";
 
 export function RegisterForm() {
   const router = useRouter();
+  const { showLoading, hideLoading } = useLoading();
+  const { refreshUser } = useAuth();
 
   const [serverError, setServerError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -31,6 +35,7 @@ export function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormData) => {
     setServerError(null);
+    showLoading();
 
     const { data: res, error } = await authService.register({
       first_name: data.firstName,
@@ -41,12 +46,15 @@ export function RegisterForm() {
     });
 
     if (error) {
+      hideLoading();
       setServerError(error);
       return;
     }
 
     if (res) {
+      await refreshUser();
       router.push("/");
+      hideLoading();
     }
   };
 

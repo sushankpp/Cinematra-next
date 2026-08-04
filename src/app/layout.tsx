@@ -7,6 +7,8 @@ import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "sonner";
 import { cn } from "@/lib/util";
 import { OnboardingGate } from "@/components/onboarding/OnboardingGate";
+import { LoadingProvider } from "@/context/LoadingContext";
+import { LoadingOverlay } from "@/components/layout/LoadingOverlay";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -48,13 +50,16 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-secondary-Body">
         <NextTopLoader color="#e50914" height={3} showSpinner={false} />
-        <AuthProvider>
-          <OnboardingGate />
-          <RootLayoutWrapper>
-            {children}
-          </RootLayoutWrapper>
-          <Toaster position="top-right" richColors />
-        </AuthProvider>
+        <LoadingProvider>
+          <LoadingOverlay />
+          <AuthProvider>
+            <OnboardingGate />
+            <RootLayoutWrapper>
+              {children}
+            </RootLayoutWrapper>
+            <Toaster position="top-right" richColors />
+          </AuthProvider>
+        </LoadingProvider>
       </body>
     </html>
   );

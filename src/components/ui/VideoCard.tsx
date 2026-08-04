@@ -62,21 +62,26 @@ export default function VideoCard({
             isCompact ? "w-full h-full object-cover" : "w-full h-auto",
           )}
         />
-        <div className="absolute bottom-3 right-1">
-          <div className="bg-black/80 text-white text-[11px] px-1.5 py-0.5 rounded font-body">
-            {formatFullDuration(watchedDuration, totalDuration)}
-          </div>
-        </div>
-        <div className="absolute bottom-0 left-0 w-full h-[3px] bg-white/10">
-          <div
-            className={`h-full transition-all ${completed ? "bg-green-500" : "bg-red-500"}`}
-            style={{
-              width: completed
-                ? "100%"
-                : `${getProgressPercent(watchedDuration, totalDuration)}%`,
-            }}
-          />
-        </div>
+        {watchedDuration ||
+          (totalDuration && (
+            <>
+              <div className="absolute bottom-3 right-1">
+                <div className="bg-black/80 text-white text-[11px] px-1.5 py-0.5 rounded font-body">
+                  {formatFullDuration(watchedDuration, totalDuration)}
+                </div>
+              </div>
+              <div className="absolute bottom-0 left-0 w-full h-[3px] bg-white/10">
+                <div
+                  className={`h-full transition-all ${completed ? "bg-green-500" : "bg-red-500"}`}
+                  style={{
+                    width: completed
+                      ? "100%"
+                      : `${getProgressPercent(watchedDuration, totalDuration)}%`,
+                  }}
+                />
+              </div>
+            </>
+          ))}
 
         {similarityScore !== undefined && (
           <div className="absolute top-0 left-0">
