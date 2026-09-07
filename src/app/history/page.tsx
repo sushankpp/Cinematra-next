@@ -51,7 +51,7 @@ export default function History() {
           </div>
         )}
 
-        <div className="flex flex-row gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {watchHistory.map((item) => (
             <HistoryCard key={item.id} video={item} />
           ))}

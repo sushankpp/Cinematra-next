@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase";
 import { uploadVideo, getVideo, updateVideo } from "@/lib/api";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { getGenresAndTags } from "@/services/metadata.service";
 
 export function useUploadVideo(editId?: string | null) {
   const [availableGenres, setAvailableGenres] = useState<GenreFormDB[]>([]);
@@ -51,38 +52,23 @@ export function useUploadVideo(editId?: string | null) {
   });
 
   useEffect(() => {
-    async function fetchGenres() {
-      try {
-        const { data, error } = await supabase
-          .from("genres")
-          .select("*")
-          .order("name", { ascending: true });
+    let isMounted = true;
 
-        if (error) throw error;
-        if (data) setAvailableGenres(data);
-      } catch (err) {
-        console.error("Error fetching genres:", err);
-      } finally {
-        setIsLoadingGenres(false);
-      }
-    }
-    fetchGenres();
-  }, []);
+    getGenresAndTags()
+      .then(({ genres, tags }) => {
+        if (isMounted) {
+          setAvailableGenres(genres);
+          setAvailableTags(tags);
+        }
+      })
+      .catch((err) => console.error("Failed to load genres and tags:", err))
+      .finally(() => {
+        if (isMounted) setIsLoadingGenres(false);
+      });
 
-  useEffect(() => {
-    async function fetchTags() {
-      try {
-        const { data, error } = await supabase
-          .from("tags")
-          .select("*")
-          .order("name", { ascending: true });
-        if (error) throw error;
-        if (data) setAvailableTags(data);
-      } catch (err) {
-        console.error("Error fetching tags:", err);
-      }
-    }
-    fetchTags();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

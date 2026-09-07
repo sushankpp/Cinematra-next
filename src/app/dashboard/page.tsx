@@ -9,12 +9,45 @@ import {
   TrendingUp,
   Users2,
   PlaySquare,
+  RotateCcw,
+  AlertCircle,
 } from "lucide-react";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 
 export default async function Dashboard() {
   const analytics = await fetchChannelAnalytics();
+
+  if (!analytics) {
+    return (
+      <div className="p-8 max-w-7xl mx-auto space-y-8 min-h-screen text-white bg-black flex flex-col items-center justify-center text-center">
+        <div className="bg-[#121214] border border-white/10 p-8 rounded-2xl max-w-md w-full shadow-2xl flex flex-col items-center space-y-4">
+          <div className="w-14 h-14 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+            <AlertCircle className="w-7 h-7 text-red-500" />
+          </div>
+
+          <h2 className="text-xl font-bold text-white tracking-tight">
+            Unable to Load Analytics
+          </h2>
+
+          <p className="text-sm text-white/60">
+            We couldn't retrieve your channel metrics. This might happen if you
+            are not logged in or if the server is temporarily unreachable.
+          </p>
+          <div className="flex gap-3 pt-2 w-full">
+            <Link href="/dashboard" className="flex-1">
+              <Button
+                variant="primary"
+                className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 text-sm transition-all"
+                text="Try Again"
+                icon={<RotateCcw className="w-4 h-4" />}
+              />
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const views_over_time = analytics?.views_over_time || [];
   const subs_over_time = analytics?.subs_over_time || [];

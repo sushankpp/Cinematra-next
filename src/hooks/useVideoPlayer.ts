@@ -71,37 +71,63 @@ export function useVideoPlayer(src: string, videoId?: string) {
     };
   }, [src]);
 
-  //BOLA quality switching
+  // BOLA adaptive quality switching
   useEffect(() => {
-    if (!videoId || !hlsRef.current || currentQuality != -1) return;
-
-    const interval = setInterval(async () => {
+    // Only poll when video is loaded, playing, and quality is set to Auto (-1)
+    if (!videoId || !hlsRef.current || !isPlaying || currentQuality !== -1) {
+      return;
+    }
+    let timeoutId: NodeJS.Timeout;
+    let isCancelled = false;
+    let failCount = 0;
+    const pollQuality = async () => {
       const video = videoRef.current;
-      if (!video) return;
-
+      if (!video || !isPlaying) return;
       const bufferLevel =
         video.buffered.length > 0
-          ? video.buffered.end(0) - video.currentTime
+          ? Math.max(0, video.buffered.end(0) - video.currentTime)
           : 0;
-
       try {
         const res = await fetch(
           `${BASE_URL}/videos/${videoId}/stream-info?buffer=${bufferLevel}`,
+          { signal: AbortSignal.timeout(4000) }, 
         );
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-
-        if (hlsRef.current && currentQuality != -1) {
+        failCount = 0; 
+        if (
+          !isCancelled &&
+          hlsRef.current &&
+          currentQuality === -1 &&
+          data.quality_index !== undefined
+        ) {
           hlsRef.current.currentLevel = data.quality_index;
-          hlsRef.current.loadLevel = data.quality_index; // set load level to avoid auto switching by hls.js based on its own estimation
-          hlsRef.current.nextLevel = data.quality_index; // set next level to avoid auto switching by hls.js
+          hlsRef.current.loadLevel = data.quality_index;
+          hlsRef.current.nextLevel = data.quality_index;
+        }
+        if (!isCancelled) {
+          timeoutId = setTimeout(pollQuality, 3000);
         }
       } catch (error) {
-        console.error("Failed to fetch quality prediction", error);
+        if (!isCancelled) {
+          failCount++;
+          const backoffDelay = Math.min(
+            3000 * Math.pow(2, failCount - 1),
+            15000,
+          );
+          console.warn(
+            `BOLA stream-info failed (${error}). Retrying in ${backoffDelay / 1000}s`,
+          );
+          timeoutId = setTimeout(pollQuality, backoffDelay);
+        }
       }
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [videoId, currentQuality]);
+    };
+    timeoutId = setTimeout(pollQuality, 3000);
+    return () => {
+      isCancelled = true;
+      clearTimeout(timeoutId);
+    };
+  }, [videoId, isPlaying, currentQuality]);
 
   const changeQuality = (index: number) => {
     if (!hlsRef.current) return;

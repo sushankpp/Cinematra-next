@@ -2,42 +2,67 @@ import { RelatedVideos } from "@/components/sections/video/RelatedVideos";
 import { VideoInfo } from "@/components/sections/video/VideoInfo";
 import { VideoPlayer } from "@/components/sections/video/VideoPlayer";
 import Container from "@/components/ui/Container";
-import { getVideo } from "@/lib/serverApi";
-import { getPersonalTrending, getRecommendations, getVideos } from "@/lib/serverApi";
+import { getVideo, getVideos } from "@/lib/serverApi";
 
 export default async function VideoPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [video, allVideos] = await Promise.all([getVideo(id), getVideos()]);
 
-  if (!video) return <p>Video not found</p>;
+  try {
+    const [video, allVideos] = await Promise.all([
+      getVideo(id),
+      getVideos(),
+    ]);
 
-  const trending = await getPersonalTrending();
-  const recommend = await getRecommendations();
-  // console.log("Trending for you: ", trending, "Recommendations: ", recommend);
+    if (!video) {
+      return (
+        <Container size="xl">
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <h2 className="text-2xl font-bold text-white mb-2">Video Not Found</h2>
+            <p className="text-gray-400">
+              The video you are looking for does not exist or has been removed.
+            </p>
+          </div>
+        </Container>
+      );
+    }
 
-  const relatedVideos = allVideos.filter(
-    (v: { id: string }) => v.id !== video.id,
-  );
-  return (
-    <Container size="xl">
-      <div className="flex gap-6">
-        <div className="flex-1">
-          <VideoPlayer
-            src={video.storage_url}
-            poster={video.thumbnail_url}
-            title={video.title}
-            videoId={video.id}
-          />
-          <VideoInfo video={video} />
+    const relatedVideos = allVideos.filter(
+      (v: { id: string }) => v.id !== video.id
+    );
+
+    return (
+      <Container size="xl">
+        <div className="flex gap-6">
+          <div className="flex-1">
+            <VideoPlayer
+              src={video.storage_url}
+              poster={video.thumbnail_url}
+              title={video.title}
+              videoId={video.id}
+            />
+            <VideoInfo video={video} />
+          </div>
+          <aside className="w-[380px] shrink-0">
+            <RelatedVideos videos={relatedVideos} />
+          </aside>
         </div>
-        <aside className="w-[380px] shrink-0">
-          <RelatedVideos videos={relatedVideos} />
-        </aside>
-      </div>
-    </Container>
-  );
+      </Container>
+    );
+  } catch (error) {
+    console.error("Failed to load video page:", error);
+    return (
+      <Container size="xl">
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <h2 className="text-2xl font-bold text-white mb-2">Failed to load video</h2>
+          <p className="text-gray-400">
+            There was a problem fetching this video. Please check your connection or try again later.
+          </p>
+        </div>
+      </Container>
+    );
+  }
 }

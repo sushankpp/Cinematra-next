@@ -26,146 +26,87 @@ export async function apiCall<T>(
   }
 }
 
+export const apiClient = axios.create({
+  baseURL: BASE_URL,
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 export const getVideo = async (id: string) => {
-  const res = await fetch(`${BASE_URL}/videos/${id}`, {
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("Failed to fetch video");
-  return res.json();
+  return apiClient.get(`/videos/${id}`).then((res) => res.data);
 };
 
 export const getUserVideos = async () => {
-  return axios
-    .get(`${BASE_URL}/videos/mine`, { withCredentials: true })
-    .then((res) => res.data);
+  return apiClient.get("/videos/mine").then((res) => res.data);
 };
 
 export const deleteVideo = async (id: string) => {
-  return axios
-    .delete(`${BASE_URL}/videos/${id}`, { withCredentials: true })
-    .then((res) => res.data);
+  return apiClient.delete(`/videos/${id}`).then((res) => res.data);
 };
 
 export const updateVideo = async (id: string, formData: FormData) => {
-  return axios
-    .put(`${BASE_URL}/videos/${id}`, formData, {
-      withCredentials: true,
-    })
-    .then((res) => res.data);
+  return apiClient.put(`/videos/${id}`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  }).then((res) => res.data);
 };
 
 export const uploadVideo = (
   formData: FormData,
   onProgress: (percent: number) => void,
 ) => {
-  return axios
-    .post(`${BASE_URL}/videos/upload`, formData, {
-      withCredentials: true,
-      onUploadProgress: (progressEvent) => {
-        if (progressEvent.total) {
-          const percent = Math.round(
-            (progressEvent.loaded / progressEvent.total) * 100,
-          );
-          onProgress(percent);
-        }
-      },
-    })
-    .then((res) => res.data);
+  return apiClient.post("/videos/upload", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+    onUploadProgress: (progressEvent) => {
+      if (progressEvent.total) {
+        const percent = Math.round(
+          (progressEvent.loaded / progressEvent.total) * 100,
+        );
+        onProgress(percent);
+      }
+    },
+  }).then((res) => res.data);
 };
 
 export const sendViews = async (videoId: string) => {
-  const res = await fetch(`${BASE_URL}/videos/${videoId}/view`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("Failed to send view");
-  return res.json();
+  return apiClient.post(`/videos/${videoId}/view`).then((res) => res.data);
 };
 
 export const postComment = async (videoId: string, comment: string) => {
-  const res = await fetch(`${BASE_URL}/comments`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({ video_id: videoId, content: comment }),
-  });
-  if (!res.ok) throw new Error("Failed to post comment");
-  return res.json();
+  return apiClient.post("/comments", { video_id: videoId, content: comment }).then((res) => res.data);
 };
 
 export const getComments = async (videoId: string) => {
-  const res = await fetch(`${BASE_URL}/videos/${videoId}/comments`);
-  if (!res.ok) throw new Error("Failed to fetch comments");
-  return res.json();
+  return apiClient.get(`/videos/${videoId}/comments`).then((res) => res.data);
 };
 
 export const deleteComment = async (commentId: number) => {
-  const res = await fetch(`${BASE_URL}/comments/${commentId}`, {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("Failed to delete comment");
-  return res.json();
+  return apiClient.delete(`/comments/${commentId}`).then((res) => res.data);
 };
 
 export const subscribe = async (channelId: string) => {
-  const res = await fetch(`${BASE_URL}/subscriptions`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({ channel_id: channelId }),
-  });
-  if (!res.ok) {
-    const message = await res.text();
-    throw new Error(message || "Failed to subscribe");
-  }
-  return res.json();
+  return apiClient.post("/subscriptions", { channel_id: channelId }).then((res) => res.data);
 };
 
 export const unsubscribe = async (channelId: string) => {
-  const res = await fetch(`${BASE_URL}/subscriptions/${channelId}`, {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("Failed to unsubscribe");
-  return res.json();
+  return apiClient.delete(`/subscriptions/${channelId}`).then((res) => res.data);
 };
 
 export const getSubscriptions = async (channelId?: string) => {
-  const res = await fetch(`${BASE_URL}/subscriptions/${channelId}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("Failed to fetch subscriptions");
-  return res.json();
+  return apiClient.get(`/subscriptions/${channelId}`).then((res) => res.data);
 };
 
 export const getSubscriptionCount = async (channelId: string) => {
-  const res = await fetch(`${BASE_URL}/subscriptions/${channelId}/count`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    cache: "no-store",
-  });
-  if (!res.ok) throw new Error("Failed to fetch subscription count");
-  const json = await res.json();
-  return Number(json.subscriber_count);
+  return apiClient.get(`/subscriptions/${channelId}/count`).then((res) => Number(res.data.subscriber_count));
 };
 
 export const getUserPreferences = async () => {
-  return axios
-    .get(`${BASE_URL}/preferences`, { withCredentials: true })
-    .then((res) => res.data);
+  return apiClient.get("/preferences").then((res) => res.data);
 };
 
 export const postUserPreferences = async (userPreferences: any) => {
-  return axios
-    .post(`${BASE_URL}/preferences`, userPreferences, { withCredentials: true })
-    .then((res) => res.data);
+  return apiClient.post("/preferences", userPreferences).then((res) => res.data);
 };
 
 export const watchHistory = async (
@@ -176,30 +117,22 @@ export const watchHistory = async (
     video_duration_seconds?: number;
   },
 ) => {
-  return axios
-    .post(`${BASE_URL}/watch/${videoId}`, data, { withCredentials: true })
-    .then((res) => res.data);
+  return apiClient.post(`/watch/${videoId}`, data).then((res) => res.data);
 };
 
 export const getWatchHistory = async (): Promise<WatchHistoryitem[]> => {
-  return axios
-    .get(`${BASE_URL}/watch/history`, { withCredentials: true })
-    .then((res) => res.data);
+  return apiClient.get("/watch/history").then((res) => res.data);
 };
 
 export const getGlobalTrending = async () => {
-  return axios.get(`${BASE_URL}/videos/trending`).then((res) => res.data);
+  return apiClient.get("/videos/trending").then((res) => res.data);
 };
 
 export const postVideoReaction = async (
   videoId: string,
   reactionType: "like" | "dislike",
 ) => {
-  return axios
-    .post(
-      `${BASE_URL}/videos/${videoId}/react`,
-      { reaction_type: reactionType },
-      { withCredentials: true },
-    )
-    .then((res) => res.data);
+  return apiClient.post(`/videos/${videoId}/react`, {
+    reaction_type: reactionType,
+  }).then((res) => res.data);
 };

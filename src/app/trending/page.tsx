@@ -1,10 +1,9 @@
 import { VideoGrid } from "@/components/ui/VideoGrid";
-import { getGlobalTrending } from "@/lib/api";
 import { Suspense } from "react";
 import { VideoGridSkeleton } from "@/components/skeletons/VideoGridSkeleton";
 import { Heading } from "@/components/ui/Heading";
 import Container from "@/components/ui/Container";
-import { getPersonalTrending } from "@/lib/serverApi";
+import { getGlobalTrending, getPersonalTrending } from "@/lib/serverApi";
 
 export default function TrendingPage() {
   return (
@@ -35,20 +34,31 @@ export default function TrendingPage() {
 }
 
 async function TrendingVideos() {
-  const trendingVideos = await getGlobalTrending();
+  try {
+    const trendingVideos = await getGlobalTrending();
 
-  return <VideoGrid videos={trendingVideos} items={[]} />;
+    if (!trendingVideos || trendingVideos.length === 0) {
+      return null;
+    }
+    return <VideoGrid videos={trendingVideos} items={[]} />;
+  } catch (error) {
+    console.error("Error fetching trending videos:", error);
+    return null;
+  }
 }
 
 async function PersonalTrendingVideos() {
-  let personalTrendingVideos = [];
-
   try {
-    personalTrendingVideos = await getPersonalTrending();
+    const personalTrendingVideos = await getPersonalTrending();
+
+    if (!personalTrendingVideos || personalTrendingVideos.length === 0) {
+      return null;
+    }
+
+    return <VideoGrid videos={personalTrendingVideos} items={[]} />;
   } catch (error) {
     console.error("Error fetching personal trending videos:", error);
     return null;
   }
-
-  return <VideoGrid videos={personalTrendingVideos} items={[]} />;
 }
+

@@ -34,15 +34,20 @@ export function useVideoInfo(video: VideoCardProps["video"]) {
       try {
         setLoadingCount(true);
 
-        const count = await getSubscriptionCount(channelId);
-        if (!cancelled) setSubCount(count);
+        const [count, subscribed] = await Promise.all([
+          getSubscriptionCount(channelId).catch((err) => {
+            console.error("Error fetching subscription count:", err);
+            return 0;
+          }),
+          getSubscriptions(channelId).catch((err) => {
+            console.error("Error fetching subscriptions:", err);
+            return [];
+          }),
+        ]);
 
-        try {
-          const subscribed = await getSubscriptions(channelId);
-          if (!cancelled)
-            setIsSubscribed(Array.isArray(subscribed) && subscribed.length > 0);
-        } catch {
-          if (!cancelled) setIsSubscribed(false);
+        if (!cancelled) {
+          setSubCount(count);
+          setIsSubscribed(Array.isArray(subscribed) && subscribed.length > 0);
         }
       } catch (error) {
         if (!cancelled)

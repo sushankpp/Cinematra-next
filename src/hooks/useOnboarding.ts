@@ -1,22 +1,11 @@
 "use client";
 import { postUserPreferences } from "@/lib/api";
-import { supabase } from "@/lib/supabase";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useAuth } from "./useAuth";
-
-type Genre = {
-  id: number;
-  name: string;
-  slug: string;
-};
-
-type Tag = {
-  id: number;
-  name: string;
-  slug: string;
-};
+import { getGenresAndTags } from "@/services/metadata.service";
+import { GenreFormDB as Genre, TagFromDB as Tag } from "@/types/components/ui/videoCard.types";
 
 export function useOnboarding() {
   const [steps, setSteps] = useState(1);
@@ -31,23 +20,24 @@ export function useOnboarding() {
   const { refreshUser } = useAuth();
   const router = useRouter();
 
-  const fetchGenres = async () => {
-    const { data, error } = await supabase.from("genres").select("*");
-    if (error) {
-      console.error("Error fetching genres:", error);
-      return;
-    }
-    setGenres(data ?? []);
-  };
+  useEffect(() => {
+    let isMounted = true;
 
-  const fetchTags = async () => {
-    const { data, error } = await supabase.from("tags").select("*");
-    if (error) {
-      console.error("Error fetching tags:", error);
-      return;
-    }
-    setTags(data ?? []);
-  };
+    getGenresAndTags()
+      .then(({ genres, tags }) => {
+        if (isMounted) {
+          setGenres(genres);
+          setTags(tags);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load genres and tags:", err);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const toggleGenre = (id: number) => {
     setSelectedGenres((prev) =>
@@ -81,27 +71,23 @@ export function useOnboarding() {
       preferred_ratings: selectedRatings,
     });
 
-    console.log("Submitting preferences:", payload);
     setIsSubmitting(true);
     try {
       const res = await postUserPreferences(payload);
-      if (res.success) {
+      if (res?.success) {
         await refreshUser();
         toast.success("Your preferences have been saved!");
         router.push("/");
-        setIsSubmitting(false);
+      } else {
+        toast.error("Failed to save preferences. Please try again.");
       }
     } catch (error) {
       console.error("Error submitting user preferences:", error);
+      toast.error("An error occurred while saving your preferences.");
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  useEffect(() => {
-    fetchGenres();
-    fetchTags();
-  }, []);
 
   return {
     steps,
