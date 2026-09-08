@@ -1,9 +1,10 @@
 "use client";
 import { VideoPlayerProps } from "@/types/components/sections/video/videoPlayer.types";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useVideoPlayer } from "@/hooks/useVideoPlayer";
 import { VideoControls } from "./VideoControls";
 import { sendViews, watchHistory } from "@/lib/api";
+import { useAuth } from "@/hooks/useAuth";
 
 export function VideoPlayer({
   src,
@@ -15,25 +16,30 @@ export function VideoPlayer({
   const videoControls = useVideoPlayer(src);
   const viewSent = useRef(false);
   const progressInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    return () => {
+      if (progressInterval.current) {
+        clearInterval(progressInterval.current);
+      }
+    };
+  }, []);
 
   const handleFirstPlay = () => {
     if (!viewSent.current) {
       viewSent.current = true;
-      sendViews(videoId)
-        .then((res) => {
-          console.log("View sent successfully for video:", videoId);
-        })
-        .catch(() => {
-          viewSent.current = false;
-        });
+      sendViews(videoId);
     }
   };
 
   const handlePlay = () => {
     videoControls.setIsPlaying(true);
     handleFirstPlay();
+    if (progressInterval.current) clearInterval(progressInterval.current);
+
     progressInterval.current = setInterval(() => {
-      if (videoControls.videoRef.current) {
+      if (videoControls.videoRef.current && user) {
         watchHistory(videoId, {
           watch_duration_seconds: Math.floor(
             videoControls.videoRef.current.currentTime,
@@ -44,27 +50,31 @@ export function VideoPlayer({
           completed: false,
         });
       }
-    }, 1000);
+    }, 5000);
   };
 
   const handlePause = () => {
     videoControls.setIsPlaying(false);
     if (progressInterval.current) clearInterval(progressInterval.current);
-    watchHistory(videoId, {
-      watch_duration_seconds: Math.floor(videoControls.currentTime),
-      video_duration_seconds: Math.floor(videoControls.duration),
-      completed: false,
-    });
+    if (user) {
+      watchHistory(videoId, {
+        watch_duration_seconds: Math.floor(videoControls.currentTime),
+        video_duration_seconds: Math.floor(videoControls.duration),
+        completed: false,
+      });
+    }
   };
 
   const handleEnded = () => {
     if (progressInterval.current) clearInterval(progressInterval.current);
     videoControls.setIsPlaying(false);
-    watchHistory(videoId, {
-      watch_duration_seconds: Math.floor(videoControls.duration),
-      video_duration_seconds: Math.floor(videoControls.duration),
-      completed: true,
-    });
+    if (user) {
+      watchHistory(videoId, {
+        watch_duration_seconds: Math.floor(videoControls.duration),
+        video_duration_seconds: Math.floor(videoControls.duration),
+        completed: true,
+      });
+    }
   };
 
   return (

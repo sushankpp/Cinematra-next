@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { postComment, getComments, deleteComment } from "@/lib/api";
 import { Comment } from "@/types/components/sections/video/comment.types";
+import { toast } from "sonner";
 
 export const useVideoComment = (videoId: string) => {
   const [commentText, setCommentText] = useState("");
@@ -19,6 +20,12 @@ export const useVideoComment = (videoId: string) => {
 
   const handleSubmit = async () => {
     if (!commentText.trim()) return;
+
+    if (!isAuthenticated) {
+      toast.error("You must be logged in to comment.");
+      return;
+    }
+
     const newComment: Comment = {
       id: Date.now(),
       users: {
@@ -33,10 +40,11 @@ export const useVideoComment = (videoId: string) => {
     setCommentText("");
     try {
       await postComment(videoId, newComment.content);
+      toast.success("Comment posted successfully!");
     } catch {
       setComments((prev) => prev.filter((c) => c.id !== newComment.id));
       setCommentText(newComment.content);
-      window.alert("Failed to post comment. Please try again.");
+      toast.error("Failed to post comment. Please try again.");
     }
   };
 
@@ -45,9 +53,10 @@ export const useVideoComment = (videoId: string) => {
     setComments((prev) => prev.filter((c) => c.id !== commentId));
     try {
       await deleteComment(commentId);
+      toast.success("Comment deleted successfully");
     } catch {
       setComments(previous);
-      window.alert("Failed to delete comment. Please try again.");
+      toast.error("Failed to delete comment. Please try again.");
     }
   };
 

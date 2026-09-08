@@ -27,41 +27,40 @@ export function useVideoInfo(video: VideoCardProps["video"]) {
   const [loadingReaction, setLoadingReaction] = useState(false);
   const channelId = video.user_id;
 
-  useEffect(() => {
-    let cancelled = false;
+useEffect(() => {
+  let cancelled = false;
 
-    const fetchSubscriptionData = async () => {
-      try {
-        setLoadingCount(true);
+  const fetchSubscriptionData = async () => {
+    try {
+      setLoadingCount(true);
 
-        const [count, subscribed] = await Promise.all([
-          getSubscriptionCount(channelId).catch((err) => {
-            console.error("Error fetching subscription count:", err);
-            return 0;
-          }),
-          getSubscriptions(channelId).catch((err) => {
-            console.error("Error fetching subscriptions:", err);
-            return [];
-          }),
-        ]);
+      const [count, subscribed] = await Promise.all([
+        getSubscriptionCount(channelId).catch((err) => {
+          console.error("Error fetching subscription count:", err);
+          return 0;
+        }),
+        user
+          ? getSubscriptions(channelId).catch(() => [])
+          : Promise.resolve([]),
+      ]);
 
-        if (!cancelled) {
-          setSubCount(count);
-          setIsSubscribed(Array.isArray(subscribed) && subscribed.length > 0);
-        }
-      } catch (error) {
-        if (!cancelled)
-          console.error("Error fetching subscription data:", error);
-      } finally {
-        if (!cancelled) setLoadingCount(false);
+      if (!cancelled) {
+        setSubCount(count);
+        setIsSubscribed(Array.isArray(subscribed) && subscribed.length > 0);
       }
-    };
+    } catch (error) {
+      if (!cancelled) console.error("Error fetching subscription data:", error);
+    } finally {
+      if (!cancelled) setLoadingCount(false);
+    }
+  };
 
-    fetchSubscriptionData();
-    return () => {
-      cancelled = true;
-    };
-  }, [channelId]);
+  fetchSubscriptionData();
+  return () => {
+    cancelled = true;
+  };
+}, [channelId, user]);
+
 
   const handleSubscribe = async () => {
     const previousCount = subCount;
@@ -140,6 +139,11 @@ export function useVideoInfo(video: VideoCardProps["video"]) {
   };
 
   const handleLikes = async () => {
+    if (!user) {
+      toast.error("You must be logged in to like.");
+      return;
+    }
+
     const wasLiked = likeState === "like";
     const wasDisliked = likeState === "dislike";
     const newReaction = wasLiked ? null : "like";
@@ -169,6 +173,11 @@ export function useVideoInfo(video: VideoCardProps["video"]) {
   };
 
   const handleDislikes = async () => {
+    if (!user) {
+      toast.error("You must be logged in to dislike.");
+      return;
+    }
+
     const wasDisliked = likeState === "dislike";
     const wasLiked = likeState === "like";
     const newReaction = wasDisliked ? null : "dislike";
