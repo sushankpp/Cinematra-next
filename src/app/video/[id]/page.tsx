@@ -43,6 +43,9 @@ export default async function VideoPage({
               poster={video.thumbnail_url}
               title={video.title}
               videoId={video.id}
+              description={video.description}
+              moderationLabel={video.moderation_label}
+              moderationConfidence={video.moderation_confidence}
             />
             <VideoInfo video={video} />
           </div>

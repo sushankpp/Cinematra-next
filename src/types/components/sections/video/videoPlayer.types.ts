@@ -3,6 +3,9 @@ export interface VideoPlayerProps extends React.HTMLAttributes<HTMLVideoElement>
     poster? :string;
     title: string;
     videoId: string;
+    description?:string;
+    moderationLabel?:string;
+    moderationConfidence?:number;
     nextVideoSrc? : string;
     prevVideoSrc? : string;
     className? : string;
