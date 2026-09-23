@@ -34,6 +34,7 @@ async function VideoGridFetcher() {
 
   try {
     recommendations = await getRecommendations();
+    console.log("Recommendations: ", recommendations);
   } catch (error) {
     console.error("Error fetching recommendations:", error);
     return null;

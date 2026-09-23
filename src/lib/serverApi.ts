@@ -51,9 +51,19 @@ async function serverFetch<T = any>(
 }
 
 export const getRecommendations = async () => {
-  return serverFetch<any[]>("/videos/recommendations", [], {
+  const videos = await serverFetch<any[]>("/videos/recommendations", [], {
     requireAuth: true,
     revalidate: 30,
+  });
+
+  if (!Array.isArray(videos)) {
+    return [];
+  }
+
+  return [...videos].sort((a, b) => {
+    const scoreA = Number(a?.similarity_score ?? a?.similarityScore ?? 0);
+    const scoreB = Number(b?.similarity_score ?? b?.similarityScore ?? 0);
+    return scoreB - scoreA;
   });
 };
 
@@ -74,7 +84,7 @@ export const getChannels = async () => {
 export const getVideos = async () => {
   return serverFetch<any[]>("/videos", [], {
     requireAuth: false,
-    revalidate: 30,
+    revalidate: 0,
   });
 };
 

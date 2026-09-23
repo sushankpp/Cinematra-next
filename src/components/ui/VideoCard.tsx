@@ -33,6 +33,10 @@ export default function VideoCard({
   ...props
 }: VideoCardProps) {
   const isCompact = variant === "compact";
+  const durationText = formatFullDuration(watchedDuration, totalDuration);
+  const showProgressBar =
+    Boolean(totalDuration && totalDuration > 0) &&
+    (Boolean(watchedDuration && watchedDuration > 0) || Boolean(completed));
 
   return (
     <div
@@ -62,26 +66,26 @@ export default function VideoCard({
             isCompact ? "w-full h-full object-cover" : "w-full h-auto",
           )}
         />
-        {watchedDuration ||
-          (totalDuration && (
-            <>
-              <div className="absolute bottom-3 right-1">
-                <div className="bg-black/80 text-white text-[11px] px-1.5 py-0.5 rounded font-body">
-                  {formatFullDuration(watchedDuration, totalDuration)}
-                </div>
-              </div>
-              <div className="absolute bottom-0 left-0 w-full h-[3px] bg-white/10">
-                <div
-                  className={`h-full transition-all ${completed ? "bg-green-500" : "bg-red-500"}`}
-                  style={{
-                    width: completed
-                      ? "100%"
-                      : `${getProgressPercent(watchedDuration, totalDuration)}%`,
-                  }}
-                />
-              </div>
-            </>
-          ))}
+        {durationText ? (
+          <div className="absolute bottom-3 right-1">
+            <div className="bg-black/80 text-white text-[11px] px-1.5 py-0.5 rounded font-body">
+              {durationText}
+            </div>
+          </div>
+        ) : null}
+
+        {showProgressBar ? (
+          <div className="absolute bottom-0 left-0 w-full h-[3px] bg-white/10">
+            <div
+              className={`h-full transition-all ${completed ? "bg-green-500" : "bg-red-500"}`}
+              style={{
+                width: completed
+                  ? "100%"
+                  : `${getProgressPercent(watchedDuration ?? 0, totalDuration ?? 0)}%`,
+              }}
+            />
+          </div>
+        ) : null}
 
         {similarityScore !== undefined && (
           <div className="absolute top-0 left-0">

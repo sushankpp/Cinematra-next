@@ -156,7 +156,6 @@ export function VideoPlayer({
 
         <VideoControls {...videoControls} />
 
-        {/* Moderation overlay sits inside the player container */}
         {moderationLabel && (
           <VideoModerationAlert
             isOpen={showModerationAlert}

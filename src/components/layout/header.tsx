@@ -9,8 +9,10 @@ import Search from "../ui/Search";
 import UserButton from "../ui/UserButton";
 import { useAuth } from "@/hooks/useAuth";
 import UserProfile from "../ui/UserProfile";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
+import { NotificationBell } from "./NotificationBell";
+import { isAdminUser } from "@/lib/admin";
 
 export default function Header() {
   const { user, isAuthenticated } = useAuth();
@@ -50,7 +52,17 @@ export default function Header() {
             className="hidden lg:flex justify-between"
           />
           <NavItemsMobile items={navItemsData} />
-          <div className="flex gap-3">
+          <div className="flex gap-3 items-center">
+            {isAuthenticated && isAdminUser(user) && (
+              <Link
+                href="/admin"
+                className="rounded-full px-4 py-2 flex items-center text-sm font-medium text-red-text bg-white/10 backdrop-blur-md border border-white/20 shadow-lg shadow-white/10 hover:bg-white/20 hover:border-white/30 hover:shadow-white/20 transition-all duration-300 supports-[backdrop-filter]:bg-white/10"
+                title="Admin Panel"
+              >
+                <ShieldCheck className="w-4 h-4 mr-1" />
+                Admin
+              </Link>
+            )}
             {isAuthenticated && (
               <Link
                 href="/dashboard/upload"
@@ -61,6 +73,7 @@ export default function Header() {
               </Link>
             )}
             <Search />
+            {isAuthenticated && <NotificationBell />}
             {isAuthenticated ? <UserProfile user={user!} /> : <UserButton />}
           </div>
         </div>

@@ -10,15 +10,18 @@ export const formatDuration = (seconds: number) => {
   return `${m}m ${s}s watched`;
 };
 
-export const formatFullDuration = (watched: number, total: number) => {
-  if (!total || total <= 0) return ""
-
+export const formatFullDuration = (watched?: number, total?: number) => {
   const fmt = (s: number) => {
-    const m = Math.floor(s / 60)
-    const sec = String(Math.floor(s % 60)).padStart(2, "0")
-    return `${m}:${sec}`
-  }
+    const m = Math.floor(s / 60);
+    const sec = String(Math.floor(s % 60)).padStart(2, "0");
+    return `${m}:${sec}`;
+  };
 
-  if (!watched || watched <= 0) return fmt(total)
-  return `${fmt(watched)} / ${fmt(total)}`
-}
+  const hasTotal = typeof total === "number" && total > 0;
+  const hasWatched = typeof watched === "number" && watched > 0;
+
+  if (!hasTotal && !hasWatched) return "";
+  if (!hasWatched) return fmt(total!);
+  if (!hasTotal) return fmt(watched!);
+  return `${fmt(watched!)} / ${fmt(total!)}`;
+};
